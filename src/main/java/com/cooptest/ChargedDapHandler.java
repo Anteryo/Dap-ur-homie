@@ -2059,7 +2059,6 @@ public class ChargedDapHandler {
                         world.createExplosion(null, pos.x, pos.y, pos.z, 100.0f, true,
                                 net.minecraft.world.World.ExplosionSourceType.TNT);
 
-                       !
                         spawnExpandingLegendarySonicBoom(world, pos);
 
                         activeHeavenParticles.add(new HeavenParticleSpawner(world, pos, 30000));
