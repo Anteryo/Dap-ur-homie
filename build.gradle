@@ -15,6 +15,10 @@ repositories {
     maven {
         url = "https://maven.fabricmc.net/"
     }
+    maven {
+        name = "RedlanceMinecraft"
+        url = "https://repo.redlance.org/public"
+    }
 }
 
 fabricApi {
@@ -30,7 +34,7 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 // Local
-    modImplementation files('libs/PlayerAnimationLibFabric-1_1_3_mc_1_21_1__1_.jar')
+    modImplementation "com.zigythebird.playeranim:PlayerAnimationLibFabric:$pal_version"
 }
 processResources {
     inputs.property "version", project.version
