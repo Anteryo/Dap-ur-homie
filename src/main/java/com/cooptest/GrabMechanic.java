@@ -29,8 +29,8 @@ public class GrabMechanic {
     public static final HashMap<UUID, UUID> holding = new HashMap<>();
     public static final HashMap<UUID, UUID> heldBy = new HashMap<>();
     public static final HashMap<UUID, Boolean> shieldMode = new HashMap<>();  
-    public static final HashMap<UUID, Long> shieldSwapCooldown = new HashMap<>();  /
-    public static final HashMap<UUID, net.minecraft.entity.decoration.ArmorStandEntity> shieldArmorStands = new HashMap<>();  
+    public static final HashMap<UUID, Long> shieldSwapCooldown = new HashMap<>();
+    public static final HashMap<UUID, net.minecraft.entity.decoration.ArmorStandEntity> shieldArmorStands = new HashMap<>();
     private static final long SHIELD_SWAP_COOLDOWN_MS = 1000;  
     private static final HashMap<UUID, PendingThrow> pendingThrows = new HashMap<>();
     private static final HashMap<UUID, ThrownPlayerData> thrownPlayers = new HashMap<>();
