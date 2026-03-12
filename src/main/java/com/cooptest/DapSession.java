@@ -100,8 +100,8 @@ public class DapSession {
         // Stop velocity completely
         playerA.setVelocity(Vec3d.ZERO);
         playerB.setVelocity(Vec3d.ZERO);
-        playerA.velocityModified = true;
-        playerB.velocityModified = true;
+        playerA.velocityDirty = true;
+        playerB.velocityDirty = true;
 
         playerA.fallDistance = 0;
         playerB.fallDistance = 0;
@@ -126,7 +126,7 @@ public class DapSession {
 
         double targetY = Math.max(posA.y, posB.y);
 
-        ServerWorld world = playerA.getServerWorld();
+        ServerWorld world = playerA.getEntityWorld();
         BlockPos groundPos = new BlockPos((int)midpoint.x, (int)targetY - 1, (int)midpoint.z);
         if (world.getBlockState(groundPos).isAir()) {
             targetY = Math.min(posA.y, posB.y);
@@ -154,9 +154,9 @@ public class DapSession {
         );
 
         
-        playerA.teleport(playerA.getServerWorld(), newPosA.x, newPosA.y, newPosA.z,
+        playerA.teleport(playerA.getEntityWorld(), newPosA.x, newPosA.y, newPosA.z,
                 playerA.getYaw(), playerA.getPitch());
-        playerB.teleport(playerB.getServerWorld(), newPosB.x, newPosB.y, newPosB.z,
+        playerB.teleport(playerB.getEntityWorld(), newPosB.x, newPosB.y, newPosB.z,
                 playerB.getYaw(), playerB.getPitch());
     }
 
@@ -185,8 +185,8 @@ public class DapSession {
         playerB.prevBodyYaw = yawB;  // Prevent body lag
         playerB.prevHeadYaw = yawB;
 
-        playerA.teleport(playerA.getServerWorld(), posA.x, posA.y, posA.z, yawA, playerA.getPitch());
-        playerB.teleport(playerB.getServerWorld(), posB.x, posB.y, posB.z, yawB, playerB.getPitch());
+        playerA.teleport(playerA.getEntityWorld(), posA.x, posA.y, posA.z, yawA, playerA.getPitch());
+        playerB.teleport(playerB.getEntityWorld(), posB.x, posB.y, posB.z, yawB, playerB.getPitch());
     }
 
     

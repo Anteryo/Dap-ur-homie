@@ -9,6 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -119,12 +120,12 @@ public class DapHoldHandler {
         p1.setYaw(yawP1);
         p1.setBodyYaw(yawP1);
         p1.setHeadYaw(yawP1);
-        p1.teleport(p1.getServerWorld(), p1Pos.x, p1Pos.y, p1Pos.z, yawP1, 0.0f);
+        p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, yawP1, 0.0f);
 
         p2.setYaw(yawP2);
         p2.setBodyYaw(yawP2);
         p2.setHeadYaw(yawP2);
-        p2.teleport(p2.getServerWorld(), p2Pos.x, p2Pos.y, p2Pos.z, yawP2, 0.0f);
+        p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, yawP2, 0.0f);
     }
 
 
@@ -173,8 +174,8 @@ public class DapHoldHandler {
         activePairs.put(hfId, dapId);
         pairStartTime.put(hfId, System.currentTimeMillis());
 
-        sendFreeze(hfPlayer.getServer(), hfId,  true);
-        sendFreeze(hfPlayer.getServer(), dapId, true);
+        sendFreeze(hfPlayer.getEntityWorld().getServer(), hfId,  true);
+        sendFreeze(hfPlayer.getEntityWorld().getServer(), dapId, true);
         System.out.println("[DapHold] Sent freeze to both players");
 
         spawnHandStand(hfPlayer, dapPlayer);
@@ -183,8 +184,8 @@ public class DapHoldHandler {
         System.out.println("  - HF player (" + hfPlayer.getName().getString() + "): role=0 (highfive_dap)");
         System.out.println("  - DAP player (" + dapPlayer.getName().getString() + "): role=1 (dap_high)");
 
-        sendToAll(hfPlayer.getServer(), new DapHoldStartPayload(hfId,  dapId, 0));
-        sendToAll(hfPlayer.getServer(), new DapHoldStartPayload(dapId, hfId,  1));
+        sendToAll(hfPlayer.getEntityWorld().getServer(), new DapHoldStartPayload(hfId,  dapId, 0));
+        sendToAll(hfPlayer.getEntityWorld().getServer(), new DapHoldStartPayload(dapId, hfId,  1));
 
         PoseNetworking.broadcastAnimState(hfPlayer, 38);  // DAPHOLD_HIGHFIVE (highfive_dap)
         PoseNetworking.broadcastAnimState(dapPlayer, 39); // DAPHOLD_DAP (dap_high)
@@ -272,7 +273,7 @@ public class DapHoldHandler {
 
             if (hfPlayer == null || dapPlayer == null) continue;
 
-            ServerWorld world = hfPlayer.getServerWorld();
+            ServerWorld world = hfPlayer.getEntityWorld();
             ArmorStandEntity stand = handStands.get(hfId);
             Long loopStart = loopStartTime.get(hfId);
 
@@ -300,7 +301,7 @@ public class DapHoldHandler {
         if (hfId == null || !looping.contains(hfId)) return;
 
         UUID dapId = activePairs.get(hfId);
-        MinecraftServer server = player.getServer();
+        MinecraftServer server = player.getEntityWorld().getServer();
         if (server == null) return;
 
         System.out.println("[DapHold] J RELEASED during loop - playing dapping_end!");
@@ -348,19 +349,19 @@ public class DapHoldHandler {
         Vec3d newHf  = hf.getEntityPos().add(dir.multiply(move));
         Vec3d newDap = dap.getEntityPos().add(dir.negate().multiply(move));
 
-        hf.teleport(hf.getServerWorld(),   newHf.x,  newHf.y,  newHf.z,  hf.getYaw(),  hf.getPitch());
-        dap.teleport(dap.getServerWorld(), newDap.x, newDap.y, newDap.z, dap.getYaw(), dap.getPitch());
+        hf.teleport(hf.getEntityWorld(),   newHf.x,  newHf.y,  newHf.z,  hf.getYaw(),  hf.getPitch());
+        dap.teleport(dap.getEntityWorld(), newDap.x, newDap.y, newDap.z, dap.getYaw(), dap.getPitch());
     }
 
     private static void faceEachOther(ServerPlayerEntity a, ServerPlayerEntity b) {
         Vec3d diff = b.getEntityPos().subtract(a.getEntityPos());
         float yawA = (float)(Math.toDegrees(Math.atan2(diff.z, diff.x))) - 90f;
-        a.teleport(a.getServerWorld(), a.getX(), a.getY(), a.getZ(), yawA,        a.getPitch());
-        b.teleport(b.getServerWorld(), b.getX(), b.getY(), b.getZ(), yawA + 180f, b.getPitch());
+        a.teleport(a.getEntityWorld(), a.getX(), a.getY(), a.getZ(), yawA,        a.getPitch());
+        b.teleport(b.getEntityWorld(), b.getX(), b.getY(), b.getZ(), yawA + 180f, b.getPitch());
     }
 
     private static void spawnHandStand(ServerPlayerEntity hf, ServerPlayerEntity dap) {
-        ServerWorld world = hf.getServerWorld();
+        ServerWorld world = hf.getEntityWorld();
         Vec3d mid = hf.getEntityPos().add(0, 1.4, 0).add(dap.getEntityPos().add(0, 1.4, 0)).multiply(0.5);
 
         ArmorStandEntity stand = new ArmorStandEntity(EntityType.ARMOR_STAND, world);
@@ -382,7 +383,7 @@ public class DapHoldHandler {
     }
 
     private static void spawnImpactParticles(ServerPlayerEntity hf, ServerPlayerEntity dap, UUID hfId) {
-        ServerWorld world = hf.getServerWorld();
+        ServerWorld world = hf.getEntityWorld();
         ArmorStandEntity stand = handStands.get(hfId);
         double x, y, z;
         if (stand != null && !stand.isRemoved()) {
@@ -392,7 +393,8 @@ public class DapHoldHandler {
             x = mid.x; y = mid.y; z = mid.z;
         }
 
-        world.spawnParticles(ParticleTypes.FLASH,     x, y, z, 3,  0,   0,   0,   0);
+        world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
+                x, y, z, 3, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.END_ROD,   x, y, z, 40, 0.4, 0.4, 0.4, 0.15);
         world.spawnParticles(ParticleTypes.WHITE_ASH, x, y, z, 80, 0.6, 0.6, 0.6, 0.08);
         world.spawnParticles(ParticleTypes.CLOUD,     x, y, z, 20, 0.3, 0.3, 0.3, 0.05);

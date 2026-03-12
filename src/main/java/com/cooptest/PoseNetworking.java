@@ -280,7 +280,7 @@ public class PoseNetworking {
      * Broadcast animation state from server to all clients
      */
     public static void broadcastAnimState(ServerPlayerEntity sourcePlayer, int animStateOrdinal) {
-        var server = sourcePlayer.getEntityWorld().getServer();
+        var server = sourcePlayer.getEntityWorld().getEntityWorld().getServer();
         if (server == null) return;
 
         UUID playerId = sourcePlayer.getUuid();

@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 public class PoseEffects {
 
     public static void playIdleEffects(ServerPlayerEntity player) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         Vec3d pos = player.getEntityPos();
 
         // Whoosh sound
@@ -22,7 +22,7 @@ public class PoseEffects {
     }
 
     public static void playActionEffects(ServerPlayerEntity pusher, ServerPlayerEntity target) {
-        ServerWorld world = pusher.getServerWorld();
+        ServerWorld world = pusher.getEntityWorld();
         Vec3d pusherPos = pusher.getEntityPos();
         Vec3d targetEntityPos = target.getEntityPos();
 
@@ -88,7 +88,7 @@ public class PoseEffects {
     }
 
     public static void playLaunchTrailEffects(ServerPlayerEntity target) {
-        ServerWorld world = target.getServerWorld();
+        ServerWorld world = target.getEntityWorld();
         Vec3d pos = target.getEntityPos();
 
         world.spawnParticles(ParticleTypes.CLOUD,

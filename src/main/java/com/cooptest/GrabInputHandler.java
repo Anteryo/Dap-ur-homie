@@ -72,7 +72,7 @@ public class GrabInputHandler {
                 if (pose == PoseState.GRABBED && !client.player.hasVehicle()) {
                     // Check if wearing elytra
                     if (client.player.getEquippedStack(net.minecraft.entity.EquipmentSlot.CHEST).getItem()
-                            instanceof net.minecraft.item.ElytraItem) {
+                            == net.minecraft.item.Items.ELYTRA) { // insallah this works
                         // Send elytra boost request to server
                         ClientPlayNetworking.send(new GrabNetworking.ElytraBoostRequestPayload());
                     }

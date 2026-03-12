@@ -1,11 +1,10 @@
 package com.cooptest;
 
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.network.packet.s2c.play.EntityPassengersSetS2CPacket;
@@ -120,7 +119,7 @@ public class GrabMechanic {
             return false;
         }
 
-        ServerPlayerEntity held = holder.getServer().getPlayerManager().getPlayer(heldId);
+        ServerPlayerEntity held = holder.getEntityWorld().getServer().getPlayerManager().getPlayer(heldId);
         if (held == null) {
             cleanupGrab(holder.getUuid());
             return false;
@@ -157,13 +156,13 @@ public class GrabMechanic {
 
         PoseNetworking.poseStates.put(holder.getUuid(), PoseState.NONE);
 
-        if (holder.getServer() != null) {
-            PoseNetworking.broadcastPoseChange(holder.getServer(), holder.getUuid(), PoseState.NONE);
+        if (holder.getEntityWorld().getServer() != null) {
+            PoseNetworking.broadcastPoseChange(holder.getEntityWorld().getServer(), holder.getUuid(), PoseState.NONE);
             PoseNetworking.broadcastAnimState(holder, 0); // NONE animation
-            GrabNetworking.broadcastGrabState(holder.getServer(), holder.getUuid(), held.getUuid(), false);
+            GrabNetworking.broadcastGrabState(holder.getEntityWorld().getServer(), holder.getUuid(), held.getUuid(), false);
 
             EntityPassengersSetS2CPacket packet = new EntityPassengersSetS2CPacket(holder);
-            for (ServerPlayerEntity p : holder.getServer().getPlayerManager().getPlayerList()) {
+            for (ServerPlayerEntity p : holder.getEntityWorld().getServer().getPlayerManager().getPlayerList()) {
                 p.networkHandler.sendPacket(packet);
             }
         }
@@ -176,7 +175,7 @@ public class GrabMechanic {
 
         pendingThrows.put(held.getUuid(), new PendingThrow(holder, held, throwVelocity, 3));
 
-        holder.getServerWorld().playSound(null, holder.getX(), holder.getY(), holder.getZ(),
+        holder.getEntityWorld().playSound(null, holder.getX(), holder.getY(), holder.getZ(),
                 SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.PLAYERS, 1.0f, 0.8f + (power * 0.4f));
 
         spawnThrowParticles(holder, held);
@@ -185,7 +184,7 @@ public class GrabMechanic {
     }
 
     private static void spawnThrowParticles(ServerPlayerEntity holder, ServerPlayerEntity held) {
-        ServerWorld world = holder.getServerWorld();
+        ServerWorld world = holder.getEntityWorld();
         Vec3d pos = holder.getEntityPos();
 
         for (int i = 0; i < 10; i++) {
@@ -227,7 +226,7 @@ public class GrabMechanic {
                 ServerPlayerEntity held = pending.held;
                 if (held != null && held.isAlive()) {
                     held.setVelocity(pending.velocity);
-                    held.velocityModified = true;
+                    held.velocityDirty = true;
                     held.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(held));
 
                     boolean wasOnFire = held.isOnFire();
@@ -270,7 +269,7 @@ public class GrabMechanic {
 
                 Vec3d currentVel = player.getVelocity();
                 player.setVelocity(currentVel.add(driftX, 0, driftZ));
-                player.velocityModified = true;
+                player.velocityDirty = true;
             }
 
             long timeSinceThrow = System.currentTimeMillis() - data.throwTimeMs;
@@ -285,13 +284,13 @@ public class GrabMechanic {
                                 look.y * boostStrength + 0.5,
                                 look.z * boostStrength
                         ));
-                        player.velocityModified = true;
+                        player.velocityDirty = true;
 
                         player.startFallFlying();
 
-                        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
+                        player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0f, 1.2f);
-                        player.getServerWorld().spawnParticles(ParticleTypes.FIREWORK,
+                        player.getEntityWorld().spawnParticles(ParticleTypes.FIREWORK,
                                 player.getX(), player.getY(), player.getZ(), 10, 0.2, 0.2, 0.2, 0.1);
 
                         data.elytraBoostUsed = true;
@@ -363,7 +362,7 @@ public class GrabMechanic {
 
     
     private static void checkWallCollision(ServerPlayerEntity player, ThrownPlayerData data) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         Vec3d currentPos = player.getEntityPos();
         Vec3d velocity = player.getVelocity();
 
@@ -403,7 +402,7 @@ public class GrabMechanic {
 
                     // Slow down slightly after breaking
                     player.setVelocity(velocity.multiply(0.7));
-                    player.velocityModified = true;
+                    player.velocityDirty = true;
                     player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(player));
 
                     // Particles
@@ -480,7 +479,7 @@ public class GrabMechanic {
     }
 
     private static void spawnTrailParticles(ServerPlayerEntity player) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         Vec3d pos = player.getEntityPos();
 
         world.spawnParticles(ParticleTypes.CLOUD,
@@ -489,7 +488,7 @@ public class GrabMechanic {
     }
 
     private static void spawnLandingParticles(ServerPlayerEntity player) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         Vec3d pos = player.getEntityPos();
 
         // Get the block below for block-break particles
@@ -556,9 +555,9 @@ public class GrabMechanic {
         double startY = player.getY();
         for (double checkY = startY; checkY > startY - maxDistance; checkY -= 0.5) {
             var blockPos = player.getBlockPos().withY((int) checkY - 1);
-            var blockState = player.getServerWorld().getBlockState(blockPos);
+            var blockState = player.getEntityWorld().getBlockState(blockPos);
 
-            if (!blockState.isAir() && blockState.isSolidBlock(player.getServerWorld(), blockPos)) {
+            if (!blockState.isAir() && blockState.isSolidBlock(player.getEntityWorld(), blockPos)) {
                 return true;
             }
         }
@@ -569,7 +568,7 @@ public class GrabMechanic {
         UUID heldId = holding.get(holder.getUuid());
         if (heldId == null) return false;
 
-        ServerPlayerEntity held = holder.getServer().getPlayerManager().getPlayer(heldId);
+        ServerPlayerEntity held = holder.getEntityWorld().getServer().getPlayerManager().getPlayer(heldId);
         if (held == null) {
             cleanupGrab(holder.getUuid());
             return false;
@@ -586,20 +585,20 @@ public class GrabMechanic {
         PoseNetworking.poseStates.put(holder.getUuid(), PoseState.NONE);
         PoseNetworking.poseStates.put(held.getUuid(), PoseState.NONE);
 
-        if (holder.getServer() != null) {
-            PoseNetworking.broadcastPoseChange(holder.getServer(), holder.getUuid(), PoseState.NONE);
-            PoseNetworking.broadcastPoseChange(holder.getServer(), held.getUuid(), PoseState.NONE);
+        if (holder.getEntityWorld().getServer() != null) {
+            PoseNetworking.broadcastPoseChange(holder.getEntityWorld().getServer(), holder.getUuid(), PoseState.NONE);
+            PoseNetworking.broadcastPoseChange(holder.getEntityWorld().getServer(), held.getUuid(), PoseState.NONE);
             PoseNetworking.broadcastAnimState(holder, 0); // NONE animation
             PoseNetworking.broadcastAnimState(held, 0); // NONE animation
-            GrabNetworking.broadcastGrabState(holder.getServer(), holder.getUuid(), held.getUuid(), false);
+            GrabNetworking.broadcastGrabState(holder.getEntityWorld().getServer(), holder.getUuid(), held.getUuid(), false);
 
             EntityPassengersSetS2CPacket packet = new EntityPassengersSetS2CPacket(holder);
-            for (ServerPlayerEntity p : holder.getServer().getPlayerManager().getPlayerList()) {
+            for (ServerPlayerEntity p : holder.getEntityWorld().getServer().getPlayerManager().getPlayerList()) {
                 p.networkHandler.sendPacket(packet);
             }
         }
 
-        holder.getServerWorld().playSound(null, held.getX(), held.getY(), held.getZ(),
+        holder.getEntityWorld().playSound(null, held.getX(), held.getY(), held.getZ(),
                 SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.5f, 0.8f);
 
         return true;
@@ -609,7 +608,7 @@ public class GrabMechanic {
         UUID holderId = heldBy.get(held.getUuid());
         if (holderId == null) return false;
 
-        ServerPlayerEntity holder = held.getServer().getPlayerManager().getPlayer(holderId);
+        ServerPlayerEntity holder = held.getEntityWorld().getServer().getPlayerManager().getPlayer(holderId);
 
         // Remove slowness if holder was in shield mode
         if (holder != null && isInShieldMode(holderId)) {
@@ -623,19 +622,19 @@ public class GrabMechanic {
         PoseNetworking.poseStates.put(held.getUuid(), PoseState.NONE);
         if (holder != null) {
             PoseNetworking.poseStates.put(holder.getUuid(), PoseState.NONE);
-            PoseNetworking.broadcastPoseChange(held.getServer(), holder.getUuid(), PoseState.NONE);
+            PoseNetworking.broadcastPoseChange(held.getEntityWorld().getServer(), holder.getUuid(), PoseState.NONE);
             // Reset holder animation to NONE
             PoseNetworking.broadcastAnimState(holder, 0); // NONE animation
         }
 
-        if (held.getServer() != null) {
-            PoseNetworking.broadcastPoseChange(held.getServer(), held.getUuid(), PoseState.NONE);
+        if (held.getEntityWorld().getServer() != null) {
+            PoseNetworking.broadcastPoseChange(held.getEntityWorld().getServer(), held.getUuid(), PoseState.NONE);
             PoseNetworking.broadcastAnimState(held, 0); // NONE animation
-            GrabNetworking.broadcastGrabState(held.getServer(), holderId, held.getUuid(), false);
+            GrabNetworking.broadcastGrabState(held.getEntityWorld().getServer(), holderId, held.getUuid(), false);
 
             if (holder != null) {
                 EntityPassengersSetS2CPacket packet = new EntityPassengersSetS2CPacket(holder);
-                for (ServerPlayerEntity p : held.getServer().getPlayerManager().getPlayerList()) {
+                for (ServerPlayerEntity p : held.getEntityWorld().getServer().getPlayerManager().getPlayerList()) {
                     p.networkHandler.sendPacket(packet);
                 }
             }
@@ -644,7 +643,7 @@ public class GrabMechanic {
             held.requestTeleport(escapePos.x, escapePos.y, escapePos.z);
         }
 
-        held.getServerWorld().playSound(null, held.getX(), held.getY(), held.getZ(),
+        held.getEntityWorld().playSound(null, held.getX(), held.getY(), held.getZ(),
                 SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 0.8f, 1.2f);
 
         return true;
@@ -688,7 +687,7 @@ public class GrabMechanic {
      * Spawn fire trail behind a flying player who is on fire
      */
     private static void spawnFireTrail(ServerPlayerEntity player, ThrownPlayerData data) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         Vec3d pos = player.getEntityPos();
 
         // Spawn fire particles
@@ -719,7 +718,7 @@ public class GrabMechanic {
 
    
     private static void checkForNearbyCreepers(ServerPlayerEntity player) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         double checkRadius = 4.0;
 
         var nearbyCreepers = world.getEntitiesByClass(
@@ -769,7 +768,7 @@ public class GrabMechanic {
 
     
     private static void createFireExplosion(ServerPlayerEntity player) {
-        ServerWorld world = player.getServerWorld();
+        ServerWorld world = player.getEntityWorld();
         Vec3d pos = player.getEntityPos();
 
         world.createExplosion(
@@ -865,7 +864,7 @@ public class GrabMechanic {
         }
 
         UUID heldId = holding.get(holderId);
-        ServerPlayerEntity held = holder.getServer().getPlayerManager().getPlayer(heldId);
+        ServerPlayerEntity held = holder.getEntityWorld().getServer().getPlayerManager().getPlayer(heldId);
         if (held == null) return false;
 
         boolean currentMode = shieldMode.getOrDefault(holderId, false);
@@ -880,7 +879,7 @@ public class GrabMechanic {
 
             held.stopRiding();
 
-            ServerWorld world = holder.getServerWorld();
+            ServerWorld world = holder.getEntityWorld();
 
             double yaw = Math.toRadians(holder.getYaw());
 
@@ -903,7 +902,7 @@ public class GrabMechanic {
             world.spawnEntity(armorStand);
             shieldArmorStands.put(holderId, armorStand);
 
-            held.startRiding(armorStand, true);
+            held.startRiding(armorStand);
 
             world.playSound(null, holder.getX(), holder.getY(), holder.getZ(),
                     SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.0f, 1.2f);
@@ -913,7 +912,7 @@ public class GrabMechanic {
 
             
             PoseNetworking.poseStates.put(heldId, PoseState.NONE);
-            PoseNetworking.broadcastPoseChange(holder.getServer(), heldId, PoseState.NONE);
+            PoseNetworking.broadcastPoseChange(holder.getEntityWorld().getServer(), heldId, PoseState.NONE);
 
             PoseNetworking.poseStates.put(holderId, PoseState.NONE);
 
@@ -922,19 +921,19 @@ public class GrabMechanic {
             PoseNetworking.broadcastAnimState(holder, 28); // HOLD_SHIELD animation
 
             EntityPassengersSetS2CPacket holderPacket = new EntityPassengersSetS2CPacket(holder);
-            for (ServerPlayerEntity p : holder.getServer().getPlayerManager().getPlayerList()) {
+            for (ServerPlayerEntity p : holder.getEntityWorld().getServer().getPlayerManager().getPlayerList()) {
                 p.networkHandler.sendPacket(holderPacket);
             }
 
             net.minecraft.entity.decoration.ArmorStandEntity as = shieldArmorStands.get(holderId);
             if (as != null) {
                 EntityPassengersSetS2CPacket asPacket = new EntityPassengersSetS2CPacket(as);
-                for (ServerPlayerEntity p : holder.getServer().getPlayerManager().getPlayerList()) {
+                for (ServerPlayerEntity p : holder.getEntityWorld().getServer().getPlayerManager().getPlayerList()) {
                     p.networkHandler.sendPacket(asPacket);
                 }
             }
 
-            broadcastShieldMode(holder.getServer(), holderId, heldId, true);
+            broadcastShieldMode(holder.getEntityWorld().getServer(), holderId, heldId, true);
         } else {
             holder.sendMessage(net.minecraft.text.Text.literal("§e THROW MODE"), true);
             held.sendMessage(net.minecraft.text.Text.literal("§eBack to throw mode"), true);
@@ -946,24 +945,24 @@ public class GrabMechanic {
                 armorStand.discard();
             }
 
-            held.startRiding(holder, true);
+            held.startRiding(holder);
 
             PoseNetworking.poseStates.put(heldId, PoseState.GRABBED);
-            PoseNetworking.broadcastPoseChange(held.getServer(), heldId, PoseState.GRABBED);
+            PoseNetworking.broadcastPoseChange(held.getEntityWorld().getServer(), heldId, PoseState.GRABBED);
 
             PoseNetworking.broadcastAnimState(holder, 3); // GRAB_HOLDING animation
 
             holder.removeStatusEffect(net.minecraft.entity.effect.StatusEffects.SLOWNESS);
 
             EntityPassengersSetS2CPacket holderPacket = new EntityPassengersSetS2CPacket(holder);
-            for (ServerPlayerEntity p : holder.getServer().getPlayerManager().getPlayerList()) {
+            for (ServerPlayerEntity p : holder.getEntityWorld().getServer().getPlayerManager().getPlayerList()) {
                 p.networkHandler.sendPacket(holderPacket);
             }
 
-            holder.getServerWorld().playSound(null, holder.getX(), holder.getY(), holder.getZ(),
+            holder.getEntityWorld().playSound(null, holder.getX(), holder.getY(), holder.getZ(),
                     SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
-            broadcastShieldMode(holder.getServer(), holderId, heldId, false);
+            broadcastShieldMode(holder.getEntityWorld().getServer(), holderId, heldId, false);
         }
 
         return true;
@@ -1001,7 +1000,7 @@ public class GrabMechanic {
                 holder.removeStatusEffect(net.minecraft.entity.effect.StatusEffects.SLOWNESS);
 
                 PoseNetworking.poseStates.put(holderId, PoseState.NONE);
-                PoseNetworking.broadcastPoseChange(holder.getServer(), holderId, PoseState.NONE);
+                PoseNetworking.broadcastPoseChange(holder.getEntityWorld().getServer(), holderId, PoseState.NONE);
                 PoseNetworking.broadcastAnimState(holder, 0); // NONE animation
 
                 GrabNetworking.broadcastGrabState(server, holderId, heldId, false);
@@ -1028,7 +1027,7 @@ public class GrabMechanic {
                 holder.removeStatusEffect(net.minecraft.entity.effect.StatusEffects.SLOWNESS);
 
                 PoseNetworking.poseStates.put(holderId, PoseState.NONE);
-                PoseNetworking.broadcastPoseChange(holder.getServer(), holderId, PoseState.NONE);
+                PoseNetworking.broadcastPoseChange(holder.getEntityWorld().getServer(), holderId, PoseState.NONE);
                 PoseNetworking.broadcastAnimState(holder, 0); // NONE animation
 
                 GrabNetworking.broadcastGrabState(server, holderId, heldId, false);
@@ -1087,7 +1086,7 @@ public class GrabMechanic {
         if (!isInShieldMode(holder.getUuid())) return null;
         UUID heldId = holding.get(holder.getUuid());
         if (heldId == null) return null;
-        return holder.getServer().getPlayerManager().getPlayer(heldId);
+        return holder.getEntityWorld().getServer().getPlayerManager().getPlayer(heldId);
     }
 
   

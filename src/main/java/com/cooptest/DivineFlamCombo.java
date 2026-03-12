@@ -83,7 +83,7 @@ public class DivineFlamCombo {
         ServerPlayNetworking.send(p1, new DivineStartPayload());
         ServerPlayNetworking.send(p2, new DivineStartPayload());
 
-        ServerWorld world = p1.getServerWorld();
+        ServerWorld world = p1.getEntityWorld();
         world.playSound(null, midpoint.x, midpoint.y, midpoint.z,
                 ModSounds.EPIC_DAP, SoundCategory.PLAYERS, 1.5f, 1.1f);
 
@@ -109,7 +109,7 @@ public class DivineFlamCombo {
         UUID partnerId = comboPartner.get(playerId);
         if (partnerId == null) return;
 
-        ServerPlayerEntity partner = player.getServer().getPlayerManager().getPlayer(partnerId);
+        ServerPlayerEntity partner = player.getEntityWorld().getServer().getPlayerManager().getPlayer(partnerId);
         if (partner == null) return;
 
         // Check if partner also in window
@@ -140,7 +140,7 @@ public class DivineFlamCombo {
         PoseNetworking.broadcastAnimState(p1, 37);
         PoseNetworking.broadcastAnimState(p2, 38);
 
-        ServerWorld world = p1.getServerWorld();
+        ServerWorld world = p1.getEntityWorld();
         Vec3d midpoint = p1.getEntityPos().add(p2.getEntityPos()).multiply(0.5);
 
         System.out.println("[Divine Flame] Spawning Divine Flame vortex at " + midpoint);
@@ -193,8 +193,8 @@ public class DivineFlamCombo {
                     float yawP1 = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90;
                     float yawP2 = yawP1 + 180; // Face opposite direction
 
-                    p1.teleport(p1.getServerWorld(), targetP1.x, targetP1.y, targetP1.z, yawP1, p1.getPitch());
-                    p2.teleport(p2.getServerWorld(), targetP2.x, targetP2.y, targetP2.z, yawP2, p2.getPitch());
+                    p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, yawP1, p1.getPitch());
+                    p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, yawP2, p2.getPitch());
                 }
             }
         }

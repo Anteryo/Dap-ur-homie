@@ -23,7 +23,7 @@ public class DivineFlamTestCommand {
                         return 0;
                     }
 
-                    ServerWorld world = player.getServerWorld();
+                    ServerWorld world = player.getEntityWorld();
                     Vec3d pos = player.getEntityPos().add(0, 1, 0); // Spawn at player eye level
                     Vec3d direction = player.getRotationVector(); // Move in direction player is facing
 

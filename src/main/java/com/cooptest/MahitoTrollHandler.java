@@ -9,6 +9,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -85,7 +86,7 @@ public class MahitoTrollHandler {
                 
                 if (data.trollStarted) {
                     victim.setVelocity(0, victim.getVelocity().y, 0);
-                    victim.velocityModified = true;
+                    victim.velocityDirty = true;
                 }
             }
         });
@@ -121,7 +122,7 @@ public class MahitoTrollHandler {
     }
     
     private static void startTroll(ServerPlayerEntity victim, ServerPlayerEntity troller) {
-        ServerWorld world = victim.getServerWorld();
+        ServerWorld world = victim.getEntityWorld();
         
         // Freeze movement + levitation
         victim.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 255, false, false));
@@ -152,7 +153,7 @@ public class MahitoTrollHandler {
     }
     
     private static void executeDeath(ServerPlayerEntity victim) {
-        ServerWorld world = victim.getServerWorld();
+        ServerWorld world = victim.getEntityWorld();
         double x = victim.getX();
         double y = victim.getY();
         double z = victim.getZ();
@@ -160,7 +161,8 @@ public class MahitoTrollHandler {
         // Firework explosion on head!
         world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER, x, y + 2, z, 1, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.FIREWORK, x, y + 2, z, 50, 0.5, 0.5, 0.5, 0.3);
-        world.spawnParticles(ParticleTypes.FLASH, x, y + 2, z, 3, 0, 0, 0, 0);
+        world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
+                x, y, z, 3, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y + 2, z, 30, 0.4, 0.4, 0.4, 0.15);
         world.spawnParticles(ParticleTypes.DRAGON_BREATH, x, y + 2, z, 20, 0.3, 0.3, 0.3, 0.1);
         

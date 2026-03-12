@@ -239,7 +239,7 @@ public class FallDapHandler {
 
 
     private static void squashPlayer(ServerPlayerEntity attacker, ServerPlayerEntity victim) {
-        ServerWorld world = attacker.getServerWorld();
+        ServerWorld world = attacker.getEntityWorld();
         Vec3d pos = victim.getEntityPos();
 
         world.playSound(null, pos.x, pos.y, pos.z,
@@ -259,7 +259,7 @@ public class FallDapHandler {
         victim.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 300, 0, false, false));
 
         victim.setVelocity(0, 0, 0);
-        victim.velocityModified = true;
+        victim.velocityDirty = true;
 
         squashedPlayers.put(victim.getUuid(), System.currentTimeMillis() + SQUASHED_DURATION_MS);
 
@@ -309,7 +309,7 @@ public class FallDapHandler {
     private static ServerPlayerEntity findSquashTarget(ServerPlayerEntity attacker, double horizontalRange) {
         double attackerY = attacker.getY();
 
-        for (ServerPlayerEntity other : attacker.getServerWorld().getPlayers()) {
+        for (ServerPlayerEntity other : attacker.getEntityWorld().getPlayers()) {
             if (other == attacker) continue;
 
             if (isSquashed(other.getUuid())) continue;
@@ -331,7 +331,7 @@ public class FallDapHandler {
     }
 
     private static ServerPlayerEntity findNearbyPlayer(ServerPlayerEntity player, double range) {
-        for (ServerPlayerEntity other : player.getServerWorld().getPlayers()) {
+        for (ServerPlayerEntity other : player.getEntityWorld().getPlayers()) {
             if (other == player) continue;
             if (other.squaredDistanceTo(player) <= range * range) {
                 return other;
@@ -353,7 +353,7 @@ public class FallDapHandler {
 
   
     private static void broadcastFallDapAnim(ServerPlayerEntity player, int state) {
-        var server = player.getServer();
+        var server = player.getEntityWorld().getServer();
         if (server == null) return;
 
         FallDapAnimPayload payload = new FallDapAnimPayload(player.getUuid(), state);

@@ -13,7 +13,7 @@ public class FireDapTestCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("testfiredap")
-                .requires(source -> source.hasPermissionLevel(2)) // OP level 2
+                .requires(source -> source.hasPermissionLevel(2)) // bro that doesnt exist on 1.21.11 wtf
                 .executes(FireDapTestCommand::execute)
         );
     }

@@ -8,7 +8,7 @@ public class GrabInteractionHandler {
 
     public static void register() {
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient) return ActionResult.PASS;
+            if (world.isClient()) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity clicker)) return ActionResult.PASS;
             if (!(entity instanceof ServerPlayerEntity target)) return ActionResult.PASS;
 

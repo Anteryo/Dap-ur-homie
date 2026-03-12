@@ -129,7 +129,7 @@ public class MarioJumpHandler {
      * Find a player whose head we're standing on
      */
     private static ServerPlayerEntity findPlayerBelow(ServerPlayerEntity jumper) {
-        ServerWorld world = jumper.getServerWorld();
+        ServerWorld world = jumper.getEntityWorld();
         Vec3d jumperPos = jumper.getEntityPos();
         double jumperFeetY = jumperPos.y;
 
@@ -166,7 +166,7 @@ public class MarioJumpHandler {
      *  the mario jump
      */
     private static void executeMarioJump(ServerPlayerEntity jumper, ServerPlayerEntity target) {
-        ServerWorld world = jumper.getServerWorld();
+        ServerWorld world = jumper.getEntityWorld();
         Vec3d pos = jumper.getEntityPos();
         long now = System.currentTimeMillis();
 

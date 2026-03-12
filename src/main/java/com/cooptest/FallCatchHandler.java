@@ -130,7 +130,7 @@ public class FallCatchHandler {
     }
 
     private static ServerPlayerEntity findCatcher(ServerPlayerEntity fallingPlayer) {
-        ServerWorld world = fallingPlayer.getServerWorld();
+        ServerWorld world = fallingPlayer.getEntityWorld();
         long now = System.currentTimeMillis();
 
         // Search in a generous area around the falling player
@@ -173,7 +173,7 @@ public class FallCatchHandler {
     }
 
     private static void playCatchEffects(ServerPlayerEntity caught, ServerPlayerEntity catcher) {
-        ServerWorld world = catcher.getServerWorld();
+        ServerWorld world = catcher.getEntityWorld();
         double x = (caught.getX() + catcher.getX()) / 2;
         double y = catcher.getY() + 1.5;
         double z = (caught.getZ() + catcher.getZ()) / 2;
@@ -193,7 +193,7 @@ public class FallCatchHandler {
                 x, y, z, 6, 0.2, 0.2, 0.2, 0.02);
 
         caught.setVelocity(0, 0, 0);
-        caught.velocityModified = true;
+        caught.velocityDirty = true;
 
         CatchAnimPayload payload = new CatchAnimPayload(catcher.getUuid(), caught.getUuid());
         for (ServerPlayerEntity nearby : PlayerLookup.tracking(catcher)) {
@@ -203,7 +203,7 @@ public class FallCatchHandler {
         ServerPlayNetworking.send(caught, payload);
 
         PoseNetworking.poseStates.put(catcher.getUuid(), PoseState.NONE);
-        PoseNetworking.broadcastPoseChange(catcher.getServer(), catcher.getUuid(), PoseState.NONE);
+        PoseNetworking.broadcastPoseChange(catcher.getEntityWorld().getServer(), catcher.getUuid(), PoseState.NONE);
 
         caught.sendMessage(net.minecraft.text.Text.literal("§a§l✓ " + catcher.getName().getString() + " caught you!"), true);
         catcher.sendMessage(net.minecraft.text.Text.literal("§a§l✓ PERFECT CATCH! " + caught.getName().getString()), true);

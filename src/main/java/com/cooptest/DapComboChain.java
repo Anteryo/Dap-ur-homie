@@ -3,6 +3,7 @@ package com.cooptest;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -348,7 +349,8 @@ public class DapComboChain {
                 40, 0.5, 0.5, 0.5, 0.2);
         s.world.spawnParticles(ParticleTypes.END_ROD, mid.x, mid.y, mid.z,
                 20, 0.3, 0.8, 0.3, 0.1);
-        s.world.spawnParticles(ParticleTypes.FLASH, mid.x, mid.y, mid.z,
+        s.world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
+                mid.x, mid.y, mid.z,
                 2, 0, 0, 0, 0);
         s.world.playSound(null, mid.x, mid.y, mid.z,
                 SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, SoundCategory.PLAYERS, 2.0f, 0.8f);

@@ -64,7 +64,7 @@ public class PushInteractionHandler {
 
     public static void register() {
         UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient) return ActionResult.PASS;
+            if (world.isClient()) return ActionResult.PASS;
             if (!(entity instanceof PlayerEntity target)) return ActionResult.PASS;
             if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
             if (!(target instanceof ServerPlayerEntity serverTarget)) return ActionResult.PASS;
@@ -165,7 +165,7 @@ public class PushInteractionHandler {
 
         UUID carried = GrabMechanic.holding.get(target.getUuid());
         if (carried != null) {
-            ServerPlayerEntity c = target.getServer().getPlayerManager().getPlayer(carried);
+            ServerPlayerEntity c = target.getEntityWorld().getServer().getPlayerManager().getPlayer(carried);
             if (c != null) {
                 LaunchedPlayerTracker.markPlayerAsLaunched(c.getUuid());
                 c.addVelocity(0, velocity + 0.2, 0);
@@ -182,7 +182,7 @@ public class PushInteractionHandler {
         cooldowns.put(target.getUuid(), now);
 
         PoseNetworking.broadcastPoseChange(
-                Objects.requireNonNull(pusher.getServer()),
+                Objects.requireNonNull(pusher.getEntityWorld().getServer()),
                 pusher.getUuid(),
                 PoseState.PUSH_ACTION
         );
