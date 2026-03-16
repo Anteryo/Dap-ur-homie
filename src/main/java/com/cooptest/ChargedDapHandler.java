@@ -14,6 +14,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -592,7 +593,8 @@ public class ChargedDapHandler {
                 world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER, pos.x, pos.y, pos.z, 2, 3, 3, 3, 0);
                 world.spawnParticles(ParticleTypes.FIREWORK, pos.x, pos.y, pos.z, 10, 5, 5, 5, 0.3);
                 world.spawnParticles(ParticleTypes.END_ROD, pos.x, pos.y, pos.z, 5, 4, 4, 4, 0.2);
-                world.spawnParticles(ParticleTypes.FLASH, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+                world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
+                pos.x, pos.y, pos.z, 3, 0, 0, 0, 0);
             }
             Iterator<Map.Entry<UUID, Long>> perfectDapIt = perfectDapStartTime.entrySet().iterator();
             while (perfectDapIt.hasNext()) {
@@ -1693,7 +1695,7 @@ public class ChargedDapHandler {
             new Thread(() -> {
                 try {
                     Thread.sleep(250);
-                    world.getWorld().getServer().execute(() -> {
+                    world.getServer().execute(() -> {
                         Vec3d midpoint = p1.getEntityPos().add(p2.getEntityPos()).multiply(0.5);
                         world.playSound(null, midpoint.x, midpoint.y, midpoint.z,
                                 ModSounds.DAP_WEAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
@@ -1914,7 +1916,8 @@ public class ChargedDapHandler {
             world.playSound(null, pos.x, pos.y, pos.z,
                     ModSounds.DAP_WEAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
             spawnPrecisionDapParticles(world, pos, 3);
-            world.spawnParticles(ParticleTypes.FLASH, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
+                pos.x, pos.y, pos.z, 3, 0, 0, 0, 0);
             createExplosion(world, pos, p1, p2, 3.5, 6.0f);
             applyKnockback(p1, p2, pos, 1.0);
             p1.sendMessage(net.minecraft.text.Text.literal("§6§l GREAT DAP! "), true);
@@ -1928,7 +1931,8 @@ public class ChargedDapHandler {
                     ModSounds.DAP_WEAK, SoundCategory.PLAYERS, 1.0f, 1.0f);
 
             spawnPrecisionDapParticles(world, pos, 3);
-            world.spawnParticles(ParticleTypes.FLASH, pos.x, pos.y, pos.z, 1, 0, 0, 0, 0);
+            world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
+                pos.x, pos.y, pos.z, 3, 0, 0, 0, 0);
             createExplosion(world, pos, p1, p2, 3.5, 6.0f);
             applyKnockback(p1, p2, pos, 1.0);
             p1.sendMessage(net.minecraft.text.Text.literal("§6§l GREAT DAP! "), true);
@@ -2161,7 +2165,7 @@ public class ChargedDapHandler {
 
         if (tickSpeedRestoreTime > 0 && now >= tickSpeedRestoreTime) {
             // Restore tick rate to normal (20 tps)
-            server.getCommandManager().executeWithPrefix(
+            server.getCommandManager().execute(
                     server.getCommandSource().withSilent(),
                     "tick rate 20"
             );

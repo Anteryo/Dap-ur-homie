@@ -202,7 +202,7 @@ public class GrabInputHandler {
     }
 
     private static boolean handsEmpty(MinecraftClient client) {
-        // Only check main hand - allow items in off-hand (shields, totems, etc)
+        // Only check main hand - allow items in off-hand (shields, totems, etc.)
         return client.player.getMainHandStack().isEmpty();
     }
 

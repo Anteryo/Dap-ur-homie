@@ -22,7 +22,7 @@ public class MahitoItems {
         // Register the potion type - 60 seconds duration
         Potion mahitoPotion = new Potion(
                 new StatusEffectInstance(ModEffects.MAHITO, 1200, 0) // 60 seconds
-        );
+        ); // yo i dont think 1200 is 60 seconds twin
 
         MAHITO_POTION = Registry.registerReference(
                 Registries.POTION,
