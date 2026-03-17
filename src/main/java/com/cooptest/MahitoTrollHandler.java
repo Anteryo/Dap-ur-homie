@@ -165,7 +165,7 @@ public class MahitoTrollHandler {
                 x, y, z, 3, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y + 2, z, 30, 0.4, 0.4, 0.4, 0.15);
         world.spawnParticles(ParticleTypes.DRAGON_BREATH, x, y + 2, z, 20, 0.3, 0.3, 0.3, 0.1);
-        
+
         // Explosion sounds
         world.playSound(null, x, y, z,
             SoundEvents.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, SoundCategory.PLAYERS, 2.0f, 1.0f);

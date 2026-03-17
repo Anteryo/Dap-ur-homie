@@ -727,7 +727,7 @@ public class ChargedDapHandler {
 
                         player.teleport(data.world, returnPos.x, returnPos.y, returnPos.z, yawAwayFromPartner, 0);
 
-                        player.stopFallFlying();
+                        player.stopGliding();
                         player.setVelocity(Vec3d.ZERO);
                         player.velocityDirty = true;
 
@@ -2154,7 +2154,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
         if (player.getMainHandStack().isOf(net.minecraft.item.Items.TOTEM_OF_UNDYING)) {
             player.getMainHandStack().setCount(0);
         }
-        // Check off hand
+        // Check offhand
         if (player.getOffHandStack().isOf(net.minecraft.item.Items.TOTEM_OF_UNDYING)) {
             player.getOffHandStack().setCount(0);
         }
@@ -2296,8 +2296,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                     p1.teleport(world, pos1.x, pos1.y, pos1.z, yaw1, 0);
                     p2.teleport(world, pos2.x, pos2.y, pos2.z, yaw2, 0);
 
-                    p1.stopFallFlying();
-                    p2.stopFallFlying();
+                    p1.stopGliding();
+                    p2.stopGliding();
                     p1.setVelocity(Vec3d.ZERO);
                     p2.setVelocity(Vec3d.ZERO);
                     p1.velocityDirty = true;
@@ -3037,7 +3037,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             }
         }
 
-        if (player.isFallFlying()) {
+        if (player.isGliding()) {
             return player.getVelocity();
         }
 

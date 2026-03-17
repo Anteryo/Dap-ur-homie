@@ -286,8 +286,8 @@ public class GrabMechanic {
                         ));
                         player.velocityDirty = true;
 
-                        player.startFallFlying();
-
+                        player.startGliding(); /* i'm not sure but i THINK Gliding is gliding now?
+                        idk, the official maven repo is acting like it is, ill check it out */
                         player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0f, 1.2f);
                         player.getEntityWorld().spawnParticles(ParticleTypes.FIREWORK,
