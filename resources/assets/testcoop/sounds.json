@@ -1,0 +1,90 @@
+{
+  "epic_dap": {
+    "sounds": [
+      {
+        "name": "testcoop:epic_dap",
+        "stream": false
+      }
+    ]
+  },
+  "explosion_impact": {
+    "sounds": [
+      {
+        "name": "testcoop:explosion_impact",
+        "stream": false
+      }
+    ]
+  },
+  "mahito": {
+    "sounds": [
+      {
+        "name": "testcoop:mahito",
+        "stream": false
+      }
+    ]
+  },
+  "galactic_dap": {
+    "sounds": [
+      {
+        "name": "testcoop:galactic_dap",
+        "stream": false
+      }
+    ]
+  },
+  "true_friendship": {
+    "sounds": [
+      {
+        "name": "testcoop:true_friendship",
+        "stream": false
+      }
+    ]
+  },
+  "impact": {
+    "sounds": [
+      {
+        "name": "testcoop:impact",
+        "stream": false
+      }
+    ]
+  },
+  "mariojump": {
+    "sounds": [
+      {
+        "name": "testcoop:mariojump",
+        "stream": false
+      }
+    ]
+  },
+  "fireimpact": {
+    "sounds": [
+      "testcoop:fireimpact"
+    ]
+  },
+  "dap.miss": {
+    "sounds": [
+      "testcoop:miss"
+    ],
+    "subtitle": "Dap missed"
+  },
+  "dap.weak": {
+    "sounds": [
+      "testcoop:dap1"
+    ],
+    "subtitle": "Weak dap"
+  },
+  "dap.hit": {
+    "sounds": [
+      "testcoop:dap_hit"
+    ],
+    "subtitle": "Dap hit"
+  },
+  "aura": {
+    "sounds": [
+      {
+        "name": "testcoop:aura",
+        "stream": false
+      }
+    ],
+    "subtitle": "Aura"
+  }
+}

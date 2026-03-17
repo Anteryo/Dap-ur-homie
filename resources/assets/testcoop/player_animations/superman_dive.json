@@ -1,0 +1,41 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"superman_dive": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"body": {
+					"rotation": {
+						"0.0": [90, 0, 0],
+						"0.2917": [122.85124, -0.00766, 0.02454]
+					}
+				},
+				"head": {
+					"rotation": {
+						"0.0": {
+							"post": [-80, 0, 0],
+							"lerp_mode": "catmullrom"
+						},
+						"0.2917": {
+							"post": [-65, 0, 0],
+							"lerp_mode": "catmullrom"
+						}
+					}
+				},
+				"right_arm": {
+					"rotation": {
+						"0.0": [-200, 0, 0],
+						"0.2917": [-172.5, 0, 0]
+					}
+				},
+				"left_arm": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.2917": [0, 2.5, 0]
+					}
+				}
+			}
+		}
+	}
+}

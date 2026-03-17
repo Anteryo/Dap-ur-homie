@@ -1,0 +1,23 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"grab_holding_charge_fp": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 0.5,
+			"bones": {
+				"rightArm": {
+					"rotation": {
+						"0.0": [-90, 0, 0],
+						"0.5": [-110, -15, 20]
+					}
+				},
+				"leftArm": {
+					"rotation": {
+						"0.0": [-90, 0, 0],
+						"0.5": [-110, 15, -20]
+					}
+				}
+			}
+		}
+	}
+}

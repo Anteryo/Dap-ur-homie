@@ -1,0 +1,19 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"mahito": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 4,
+			"bones": {
+				"head": {
+					"scale": {
+						"0.0": [1, 1, 1],
+						"3.8333": [1.7, 1.8, 1.9],
+						"3.9583": [2.2, 2.2, 1.9],
+						"4.0": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

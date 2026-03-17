@@ -1,0 +1,33 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"highfive_combo_fp": {
+			"animation_length": 0.6,
+			"loop": false,
+			"bones": {
+				"rightArm": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.6": [0, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.6": [0, 0, 0]
+					}
+				},
+				"leftArm": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"0.3": [-90, 0, 0],
+						"0.6": [-180, 0, 0]
+					},
+					"position": {
+						"0.0": [0, 0, 0],
+						"0.3": [0, 1, 0],
+						"0.6": [0, 3, 0]
+					}
+				}
+			}
+		}
+	}
+}

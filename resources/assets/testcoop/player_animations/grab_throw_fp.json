@@ -1,0 +1,25 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"grab_throw_fp": {
+			"loop": false,
+			"animation_length": 0.3,
+			"bones": {
+				"rightArm": {
+					"rotation": {
+						"0.0": [-110, -15, 20],
+						"0.15": [-130, 0, -5],
+						"0.3": [0, 0, 0]
+					}
+				},
+				"leftArm": {
+					"rotation": {
+						"0.0": [-110, 15, -20],
+						"0.15": [-130, 0, 5],
+						"0.3": [0, 0, 0]
+					}
+				}
+			}
+		}
+	}
+}

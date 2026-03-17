@@ -1,0 +1,17 @@
+{
+  "category.coopmoves": "Dap Ur HOMIES",
+
+  "key.coopmoves.grab": "Grab / Catch",
+  "key.coopmoves.throw": "YEET (Hold)",
+  "key.coopmoves.shield": "Human Shield Toggle",
+  "key.coopmoves.dap": "Dap (Hold)",
+  "key.coopmoves.highfive": "High Five",
+  "key.coopmoves.push": "Push EM",
+  "key.coopmoves.fire_dap_combo": "Fire Combo",
+
+  "effect.testcoop.mahito": "Mahito's Curse",
+  "item.minecraft.potion.effect.mahito_stuff": "Mahito Stuff Potion",
+  "item.minecraft.splash_potion.effect.mahito_stuff": "Splash Mahito Stuff Potion",
+  "item.minecraft.lingering_potion.effect.mahito_stuff": "Lingering Mahito Stuff Potion",
+  "item.minecraft.tipped_arrow.effect.mahito_stuff": "Arrow of Mahito's Curse"
+}

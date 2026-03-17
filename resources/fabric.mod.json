@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "testcoop",
+  "version": "${version}",
+  "name": "Coop Moves",
+  "description": "Cooperative player-to-player interaction mechanics",
+  "authors": [],
+  "contact": {},
+  "license": "",
+  "icon": "assets/testcoop/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.cooptest.TestCoop"
+    ],
+    "client": [
+      "com.cooptest.TestCoopClient"
+    ]
+  },
+  "mixins": [
+    "testcoop.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

@@ -1,0 +1,44 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"dapping": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 2.3333,
+			"bones": {
+				"torso": {
+					"rotation": [0, -60, 0]
+				},
+				"right_arm": {
+					"rotation": [-75.78863, -25.41816, -94.53568],
+					"position": [2.9, 1, -6]
+				},
+				"left_arm": {
+					"rotation": {
+						"0.0": {
+							"post": [31.19627, -24.17228, -35.14885],
+							"lerp_mode": "catmullrom"
+						}
+					},
+					"position": {
+						"0.0": {
+							"post": [-3, -0.94, 5.27],
+							"lerp_mode": "catmullrom"
+						},
+						"0.0417": {
+							"post": [-3, -0.94, 5.27],
+							"lerp_mode": "catmullrom"
+						}
+					}
+				},
+				"right_leg": {
+					"rotation": [0.0277, -37.07182, 2.44619],
+					"position": [1, 0, -2]
+				},
+				"left_leg": {
+					"rotation": [0, -67.5, 0],
+					"position": [-1, 0, 2]
+				}
+			}
+		}
+	}
+}
