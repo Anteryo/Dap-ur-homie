@@ -23,12 +23,12 @@ Heaven Dap
 
 Requirements for 1.21.1:
 
-Fabric Loader 0.18.4
-Fabric API
-Player Animation Library (PAL) — for all custom animations  https://modrinth.com/mod/player-animation-library
+- Fabric Loader 0.18.4
+- Fabric API
+- Player Animation Library (PAL) — for all custom animations  https://modrinth.com/mod/player-animation-library
 
 Requirements for 1.21.11:
 
-Fabric Loader 0.18.4
-Fabric API
-Player Animation Library (PAL) — for all custom animations  https://modrinth.com/mod/player-animation-library
+- Fabric Loader 0.18.4
+- Fabric API
+- Player Animation Library (PAL) — for all custom animations  https://modrinth.com/mod/player-animation-library
