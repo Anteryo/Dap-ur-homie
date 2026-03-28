@@ -176,7 +176,7 @@ public class MahitoTrollHandler {
             SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5f);
         
         // Kill with custom death message
-        victim.clientDamage(world.getDamageSources().magic());
+        victim.damage(world, world.getDamageSources().magic(), 9999.0F);
         
         // Announce
         for (ServerPlayerEntity player : world.getPlayers()) {
