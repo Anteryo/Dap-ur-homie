@@ -1,11 +1,3 @@
-FallDapHandler.java
-FireDapTestCommand.java
-GrabInputHandler.java
-GrabMechanic.java
-HeavenDapSoloCommand.java
-HighFiveHandler.java
-HighFiveHugHandler.java
-
 ==== CLIENT ====
 ChargedDapClientHandler.java
 DivineFlamComboClient.java
@@ -23,4 +15,3 @@ PlayerModelMixin.java
 ==== CLIENT MIXINS ====
 HeldItemRendererMixin.java
 MovementFreezeMixin.java
-PlayerEntityRendererMixin.java

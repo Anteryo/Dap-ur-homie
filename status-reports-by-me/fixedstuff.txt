@@ -39,6 +39,15 @@ DapHoldHandler.java
 DapSession.java
 DivineFlamCombo.java
 DivineFlamTestCommand.java
+FallDapHandler.java
+FireDapTestCommand.java
+GrabInputHandler.java
+GrabMechanic.java
+HeavenDapSoloCommand.java
+HighFiveHandler.java
+HighFiveHugHandler.java
+
+FIXED EVERYTHING HERE FINALLYYYYYYYYYY
 
 ==== CLIENT ====
 FallDapClientHandler.java
@@ -62,4 +71,4 @@ ExampleMixin.java
 PlayerEntityPassengerOffsetMixin.java
 
 ==== CLIENT MIXINS ====
-nevermind
+PlayerEntityRendererMixin.java

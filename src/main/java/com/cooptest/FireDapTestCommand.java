@@ -1,6 +1,7 @@
 package com.cooptest;
 
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -12,11 +13,8 @@ import net.minecraft.util.math.Vec3d;
 public class FireDapTestCommand {
     
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-        dispatcher.register(CommandManager.literal("testfiredap")
-                .requires(source -> source.hasPermissionLevel(2)) // bro that doesnt exist on 1.21.11 wtf
-                .executes(FireDapTestCommand::execute)
-        );
-    }
+        dispatcher.register((LiteralArgumentBuilder)((LiteralArgumentBuilder)CommandManager.literal("testfiredap").requires(CommandManager.requirePermissionLevel(CommandManager.GAMEMASTERS_CHECK))).executes(FireDapTestCommand::execute));
+    } // update it does exist, w zaptrem4 for the code here
     
     private static int execute(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();

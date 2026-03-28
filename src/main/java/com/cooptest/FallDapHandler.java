@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
@@ -252,7 +253,7 @@ public class FallDapHandler {
 
         dropHandItems(victim, world, pos);
 
-        victim.damage(world.getDamageSources().playerAttack(attacker), 10.0f);
+        victim.clientDamage(world.getDamageSources().playerAttack((PlayerEntity)attacker));
 
         victim.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 420, 2, false, false));
         victim.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST, 420, 250, false, false));

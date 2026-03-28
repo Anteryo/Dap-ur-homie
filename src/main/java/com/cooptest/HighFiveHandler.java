@@ -991,7 +991,7 @@ public class HighFiveHandler {
 
             if (entity instanceof ServerPlayerEntity target) {
                 float damage = (float)((1.0 - dist / radius) * 8.0);
-                target.damage(world.getDamageSources().explosion(null, null), damage);
+                target.clientDamage(world.getDamageSources().explosion(null));
             }
         }
     }
