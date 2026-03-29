@@ -65,7 +65,7 @@ public class PlayerModelMixin {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.world == null) return;
 
-        PlayerEntity player = (PlayerEntity) mc.world.getEntityById(state.id);
+        if (!(mc.world.getEntityById(state.id) instanceof PlayerEntity player)) return;
         if (player == null) return;
 
         UUID playerId = player.getUuid();
