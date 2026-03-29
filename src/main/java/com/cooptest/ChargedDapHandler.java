@@ -1022,7 +1022,7 @@ public class ChargedDapHandler {
                             entity.knockedBack = true;
 
                             if (entity instanceof net.minecraft.entity.LivingEntity living) {
-                                living.clientDamage(living.getDamageSources().magic());
+                                living.clientDamage(living.getDamageSources().genericKill());
                             }
                         }
 

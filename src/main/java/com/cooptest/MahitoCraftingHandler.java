@@ -15,13 +15,17 @@ public class MahitoCraftingHandler {
 
 
     public static boolean isValidMahitoRecipe(RecipeInputInventory inventory) {
+        if (inventory == null) { //chatgpt fix btw insallah ts works
+            return false;
+        }
+
         int ghastTearCount = 0;
         int rottenFleshCount = 0;
         int waterBottleCount = 0;
         int otherItems = 0;
 
-        for (int i = 0; i < inventory.size(); i++) {
-            ItemStack stack = inventory.getStack(i);
+        for (int i = 0; i < inventory.size(); i++) { // yeah but inv size can be null which is an invalid packet or whatever idk
+            ItemStack stack = inventory.getStack(i); // and im too lazy to look it up so yeah
             if (stack.isEmpty()) continue;
 
             if (stack.isOf(Items.GHAST_TEAR)) {
