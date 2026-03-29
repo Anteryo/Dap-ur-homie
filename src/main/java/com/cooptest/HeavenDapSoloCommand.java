@@ -152,7 +152,7 @@ public class HeavenDapSoloCommand {
         final Vec3d originalPos = player.getEntityPos();
         
         Vec3d heavenPos = new Vec3d(groundPos.x, groundPos.y + 1000, groundPos.z);
-        player.teleport(world, heavenPos.x, heavenPos.y, heavenPos.z, player.getYaw(), player.getPitch());
+        player.teleport(world, heavenPos.x, heavenPos.y, heavenPos.z, java.util.Set.of(), player.getYaw(), player.getPitch(), false);
 
         
         // Return after 3 seconds
@@ -161,7 +161,7 @@ public class HeavenDapSoloCommand {
                 Thread.sleep(3000);
                 
                 world.getServer().execute(() -> {
-                    player.teleport(world, originalPos.x, originalPos.y, originalPos.z, player.getYaw(), player.getPitch());
+                    player.teleport(world, originalPos.x, originalPos.y, originalPos.z, java.util.Set.of(), player.getYaw(), player.getPitch(), false);
 
                 });
                 

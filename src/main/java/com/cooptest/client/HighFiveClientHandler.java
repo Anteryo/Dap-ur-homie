@@ -35,7 +35,7 @@ public class HighFiveClientHandler {
     private static final Map<UUID, Boolean> frozenPlayers = new HashMap<>();
     public static void register() {
         highFiveKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coopmoves.highfive", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, "category.coopmoves"
+                "key.coopmoves.highfive", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, KeyBinding.Category.MISC
         ));
 
         ClientPlayNetworking.registerGlobalReceiver(HighFiveHandler.HandRaisedSyncPayload.ID,

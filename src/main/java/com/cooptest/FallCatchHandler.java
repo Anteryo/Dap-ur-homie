@@ -193,7 +193,7 @@ public class FallCatchHandler {
                 x, y, z, 6, 0.2, 0.2, 0.2, 0.02);
 
         caught.setVelocity(0, 0, 0);
-        caught.velocityDirty = true;
+        caught.knockedBack = true;
 
         CatchAnimPayload payload = new CatchAnimPayload(catcher.getUuid(), caught.getUuid());
         for (ServerPlayerEntity nearby : PlayerLookup.tracking(catcher)) {

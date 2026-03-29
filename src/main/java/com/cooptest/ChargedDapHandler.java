@@ -13,6 +13,8 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.server.MinecraftServer;
@@ -725,17 +727,15 @@ public class ChargedDapHandler {
                         float yawTowardsPartner = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90;
                         float yawAwayFromPartner = yawTowardsPartner + 180;  // Turn around!
 
-                        player.teleport(data.world, returnPos.x, returnPos.y, returnPos.z, yawAwayFromPartner, 0);
+                        player.teleport(data.world, returnPos.x, returnPos.y, returnPos.z, java.util.Set.of(), yawAwayFromPartner, 0.0f, false);
 
                         player.stopGliding();
                         player.setVelocity(Vec3d.ZERO);
-                        player.velocityDirty = true;
+                        player.knockedBack = true;
 
                         player.removeStatusEffect(StatusEffects.NAUSEA);
 
-                        data.world.spawnParticles(ParticleTypes.FLASH,
-                                returnPos.x, returnPos.y + 1, returnPos.z,
-                                1, 0, 0, 0, 0);
+                        data.world.spawnParticles((ParticleEffect)ParticleTypes.FLASH, returnPos.x, returnPos.y, returnPos.z, 1, 0.0, 0.0, 0.0, 0.0);
                         data.world.spawnParticles(ParticleTypes.WHITE_ASH,
                                 returnPos.x, returnPos.y + 1, returnPos.z,
                                 50, 0.5, 1.0, 0.5, 0.1);
@@ -951,7 +951,7 @@ public class ChargedDapHandler {
                             double dz = partner.getEntityPos().z - newPos.z;
                             float yaw = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90;
 
-                            player.teleport(player.getEntityWorld(), newPos.x, newPos.y, newPos.z, yaw, player.getPitch());
+                            player.teleport(player.getEntityWorld(), newPos.x, newPos.y, newPos.z, java.util.Set.of(), yaw, player.getPitch(), false);
                         }
                     }
 
@@ -1019,10 +1019,10 @@ public class ChargedDapHandler {
                                     0.5,
                                     direction.z * 2.0
                             );
-                            entity.velocityDirty = true;
+                            entity.knockedBack = true;
 
                             if (entity instanceof net.minecraft.entity.LivingEntity living) {
-                                living.damage(living.getDamageSources().magic(), 5.0f);
+                                living.clientDamage(living.getDamageSources().genericKill());
                             }
                         }
 
@@ -1088,7 +1088,7 @@ public class ChargedDapHandler {
                     int remaining = impactFreezeTicks.get(id);
                     if (remaining > 0) {
                         player.setVelocity(0, Math.min(0, player.getVelocity().y), 0); // Allow falling
-                        player.velocityDirty = true;
+                        player.knockedBack = true;
                         impactFreezeTicks.put(id, remaining - 1);
                     } else {
                         impactFreezeTicks.remove(id);
@@ -2073,7 +2073,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                         world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER, pos.x, pos.y, pos.z, 20, 5, 5, 5, 0);
                         world.spawnParticles(ParticleTypes.FIREWORK, pos.x, pos.y, pos.z, 300, 10, 10, 10, 0.5);
                         world.spawnParticles(ParticleTypes.END_ROD, pos.x, pos.y, pos.z, 200, 8, 8, 8, 0.4);
-                        world.spawnParticles(ParticleTypes.FLASH, pos.x, pos.y, pos.z, 10, 0, 0, 0, 0);
+                        world.spawnParticles((ParticleEffect)ParticleTypes.FLASH, pos.x, pos.y, pos.z, 10, 0.0, 0.0, 0.0, 0.0);
 
                         // Starburst
                         spawnStarBurst(world, pos, 100, 5.0);
@@ -2165,10 +2165,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
 
         if (tickSpeedRestoreTime > 0 && now >= tickSpeedRestoreTime) {
             // Restore tick rate to normal (20 tps)
-            server.getCommandManager().execute(
-                    server.getCommandSource().withSilent(),
-                    "tick rate 20"
-            );
+            server.getCommandManager().parseAndExecute(server.getCommandSource().withSilent(), "tick rate 20");
             tickSpeedRestoreTime = 0;
 
             // Notify players
@@ -2256,7 +2253,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
         spawnSonicBoomCircles(world, midpoint);
 
         // Additional epic particles
-        world.spawnParticles(ParticleTypes.FLASH, midpoint.x, midpoint.y, midpoint.z, 5, 0, 0, 0, 0);
+        world.spawnParticles((ParticleEffect)ParticleTypes.FLASH, midpoint.x, midpoint.y, midpoint.z, 5, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.EXPLOSION_EMITTER, midpoint.x, midpoint.y, midpoint.z, 3, 0.5, 0.5, 0.5, 0);
         world.spawnParticles(ParticleTypes.END_ROD, midpoint.x, midpoint.y, midpoint.z, 50, 1.0, 1.0, 1.0, 0.3);
         world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, midpoint.x, midpoint.y, midpoint.z, 40, 0.8, 0.8, 0.8, 0.2);
@@ -2293,15 +2290,15 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                     float yaw2 = yaw1 + 180;
 
                     // TP both to heaven
-                    p1.teleport(world, pos1.x, pos1.y, pos1.z, yaw1, 0);
-                    p2.teleport(world, pos2.x, pos2.y, pos2.z, yaw2, 0);
+                    p1.teleport(world, pos1.x, pos1.y, pos1.z, java.util.Set.of(), yaw1, 0.0f, false);
+                    p2.teleport(world, pos2.x, pos2.y, pos2.z, java.util.Set.of(), yaw2, 0.0f, false);
 
                     p1.stopGliding();
                     p2.stopGliding();
                     p1.setVelocity(Vec3d.ZERO);
                     p2.setVelocity(Vec3d.ZERO);
-                    p1.velocityDirty = true;
-                    p2.velocityDirty = true;
+                    p1.knockedBack = true;
+                    p2.knockedBack = true;
 
                     // Apply slow falling (20 seconds - covers full sequence)
                     p1.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 400, 0, false, false));
@@ -2538,7 +2535,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                     knockbackStrength * 1.5,
                     knockDir.z * knockbackStrength * 2.0
             );
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
         }
 
         // Sound
@@ -2589,7 +2586,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
         world.spawnParticles(ParticleTypes.FLAME, pos.x, pos.y + 1.0, pos.z, 30, 0.3, 0.3, 0.3, 0.2);
         world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.x, pos.y + 1.0, pos.z, 15, 0.2, 0.2, 0.2, 0.15);
         world.spawnParticles(ParticleTypes.LAVA, pos.x, pos.y + 1.0, pos.z, 8, 0.3, 0.3, 0.3, 0);
-        world.spawnParticles(ParticleTypes.FLASH, pos.x, pos.y + 1.0, pos.z, 3, 0, 0, 0, 0);
+        world.spawnParticles((ParticleEffect)ParticleTypes.FLASH, pos.x, pos.y + 1.0, pos.z, 3, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.END_ROD, pos.x, pos.y + 1.0, pos.z, 20, 0.5, 0.5, 0.5, 0.15);
         world.spawnParticles(ParticleTypes.TOTEM_OF_UNDYING, pos.x, pos.y + 1.0, pos.z, 25, 0.5, 0.5, 0.5, 0.3);
 
@@ -2610,7 +2607,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             // PERFECT FIRE DAP! No sounds/freeze here - FireDapCombo handles everything!
 
             // Extra particles for perfect
-            world.spawnParticles(ParticleTypes.DRAGON_BREATH, pos.x, pos.y, pos.z, 40, 0.8, 0.8, 0.8, 0.15);
+            world.spawnParticles((ParticleEffect)ParticleTypes.DRAGON_BREATH, pos.x, pos.y + 2, pos.z,  40, 0.8, 0.8, 0.8, 0.15);
             world.spawnParticles(ParticleTypes.ELECTRIC_SPARK, pos.x, pos.y, pos.z, 50, 0.6, 0.6, 0.6, 0.3);
 
             p1.sendMessage(net.minecraft.text.Text.literal("§c§l PERFECT FIRE DAP! "), true);
@@ -2723,9 +2720,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                         float newYaw = finalCurrentYaw + (finalDiff * progress);
                         player.setYaw(newYaw);
                         // Don't control camera/head - only rotate body
-                        player.networkHandler.sendPacket(
-                                new net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket(player)
-                        );
+                                player.networkHandler.sendPacket(new EntityPositionS2CPacket(player.getId(), net.minecraft.entity.EntityPosition.fromEntity(player), java.util.Set.of(), player.isOnGround()));
                     });
                 } catch (InterruptedException e) { break; }
             }
@@ -2751,8 +2746,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
         p1.setVelocity(0, 0, 0);
         p2.setVelocity(0, 0, 0);
 
-        p1.velocityDirty = true;
-        p2.velocityDirty = true;
+        p1.knockedBack = true;
+        p2.knockedBack = true;
     }
 
     
@@ -2761,8 +2756,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
 
         p1.setVelocity(0, 0, 0);
         p2.setVelocity(0, 0, 0);
-        p1.velocityDirty = true;
-        p2.velocityDirty = true;
+        p1.knockedBack = true;
+        p2.knockedBack = true;
 
         impactFreezeTicks.put(p1.getUuid(), ticks);
         impactFreezeTicks.put(p2.getUuid(), ticks);
@@ -2784,11 +2779,11 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             double knockbackStrength = (1.0 - dist / radius) * 2.0;
             Vec3d knockDir = entity.getEntityPos().subtract(pos).normalize();
             entity.addVelocity(knockDir.x * knockbackStrength, knockbackStrength * 0.5, knockDir.z * knockbackStrength);
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
 
             if (entity instanceof ServerPlayerEntity target) {
                 float damage = (float)((1.0 - dist / radius) * maxDamage);
-                target.damage(world.getDamageSources().explosion(null, null), damage);
+                target.clientDamage(world.getDamageSources().explosion(null));
             }
         }
     }
@@ -2823,7 +2818,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                     knockbackStrength * 0.6,
                     knockDir.z * knockbackStrength * 1.5
             );
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
 
             if (entity instanceof ServerPlayerEntity target) {
                 world.playSound(null, target.getX(), target.getY(), target.getZ(),
@@ -2880,7 +2875,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             double knockbackStrength = (1.0 - dist / radius) * 3.0;
             Vec3d knockDir = entity.getEntityPos().subtract(pos).normalize();
             entity.addVelocity(knockDir.x * knockbackStrength, knockbackStrength * 0.7, knockDir.z * knockbackStrength);
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
 
             float damage;
             if (entity instanceof ServerPlayerEntity) {
@@ -2888,7 +2883,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             } else {
                 damage = (float)((1.0 - dist / radius) * 20.0);
             }
-            entity.damage(world.getDamageSources().explosion(null, null), damage);
+            entity.clientDamage(world.getDamageSources().explosion(null));
         }
     }
 
@@ -2916,7 +2911,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                     knockbackStrength * 1.5,  // Strong upward force
                     knockDir.z * knockbackStrength
             );
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
 
             // Set entities on fire for 5 seconds
             entity.setOnFireFor(5);
@@ -3574,7 +3569,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                 double z = midpoint.z + distance * Math.sin(rad);
 
                 world.spawnParticles(ParticleTypes.FLAME, x, midpoint.y + height, z, 5, 0.3, 0.3, 0.3, 0.04);
-                world.spawnParticles(ParticleTypes.DRAGON_BREATH, x, midpoint.y + height, z, 3, 0.2, 0.2, 0.2, 0.02);
+                world.spawnParticles((ParticleEffect)ParticleTypes.DRAGON_BREATH, x, midpoint.y + (double)height, z, 3, 0.2, 0.2, 0.2, 0.02);
                 world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, midpoint.y + height, z, 2, 0.15, 0.15, 0.15, 0.01);
             }
         }
@@ -3654,7 +3649,7 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                 double z = midpoint.z + radius * Math.sin(rad);
 
                 world.spawnParticles(ParticleTypes.FLAME, x, midpoint.y, z, 3, 0.2, 0.5, 0.2, 0.05);  // Was 5
-                world.spawnParticles(ParticleTypes.DRAGON_BREATH, x, midpoint.y, z, 2, 0.15, 0.3, 0.15, 0.03);  // Was 3
+                world.spawnParticles((ParticleEffect)ParticleTypes.DRAGON_BREATH, x, midpoint.y, z, 2, 0.15, 0.3, 0.15, 0.03);  // Was 3
             }
         }
 
@@ -3726,12 +3721,12 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
                         0.8 + (strength * 0.5),  // Upward component
                         direction.z * strength
                 );
-                entity.velocityDirty = true;
+                entity.knockedBack = true;
 
                 // Damage based on distance
                 if (entity instanceof net.minecraft.entity.LivingEntity living) {
                     float damage = (float)((30 - distance) / 30.0 * 20.0);  // Up to 20 damage
-                    living.damage(living.getDamageSources().explosion(null, null), damage);
+                    living.clientDamage(living.getDamageSources().explosion(null));
                 }
             }
         }
@@ -3790,8 +3785,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             Vec3d targetP1 = midpoint.subtract(offset);
             Vec3d targetP2 = midpoint.add(offset);
 
-            p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, yawP1, 0.0f);
-            p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, yawP2, 0.0f);
+            p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, java.util.Set.of(), yawP1, 0.0f, false);
+            p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, java.util.Set.of(), yawP2, 0.0f, false);
 
             // Force body rotation to match head (so hands meet properly!)
             p1.setYaw(yawP1);
@@ -3802,8 +3797,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             p2.setHeadYaw(yawP2);
         } else {
             // Distance is correct, just update rotation to keep facing each other
-            p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, yawP1, 0.0f);
-            p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, yawP2, 0.0f);
+            p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, java.util.Set.of(), yawP1, 0.0f, false);
+            p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, java.util.Set.of(), yawP2, 0.0f, false);
 
             // Force body rotation
             p1.setYaw(yawP1);
@@ -3839,8 +3834,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             Vec3d targetP1 = midpoint.subtract(offset);
             Vec3d targetP2 = midpoint.add(offset);
 
-            p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, yawP1, 0.0f);
-            p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, yawP2, 0.0f);
+            p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, java.util.Set.of(), yawP1, 0.0f, false);
+            p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, java.util.Set.of(), yawP2, 0.0f, false);
 
             // Force body rotation
             p1.setYaw(yawP1);
@@ -3851,8 +3846,8 @@ world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f
             p2.setHeadYaw(yawP2);
         } else {
             // Distance correct, just update rotation
-            p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, yawP1, 0.0f);
-            p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, yawP2, 0.0f);
+            p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, java.util.Set.of(), yawP1, 0.0f, false);
+            p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, java.util.Set.of(), yawP2, 0.0f, false);
 
             // Force body rotation
             p1.setYaw(yawP1);

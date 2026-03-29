@@ -263,8 +263,8 @@ public class HighFiveHugHandler {
                     Vec3d targetPlayer = midpoint.subtract(offset);
                     Vec3d targetPartner = midpoint.add(offset);
 
-                    player.teleport(player.getEntityWorld(), targetPlayer.x, targetPlayer.y, targetPlayer.z, player.getYaw(), player.getPitch());
-                    partner.teleport(partner.getEntityWorld(), targetPartner.x, targetPartner.y, targetPartner.z, partner.getYaw(), partner.getPitch());
+                    player.teleport(player.getEntityWorld(), targetPlayer.x, targetPlayer.y, targetPlayer.z, java.util.Set.of(), player.getYaw(), player.getPitch(), false);
+                    partner.teleport(partner.getEntityWorld(), targetPartner.x, targetPartner.y, targetPartner.z, java.util.Set.of(), partner.getYaw(), partner.getPitch(), false);
                 } else if (distance > HUG_DISTANCE + 0.5) {
                     // Way too far apart - end hug
                     stateChanges.add(() -> endHug(player, partner));

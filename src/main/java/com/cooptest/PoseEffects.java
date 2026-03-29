@@ -84,7 +84,7 @@ public class PoseEffects {
 
         // Push pusher down slightly
         pusher.setVelocity(pusher.getVelocity().add(0, -0.15, 0));
-        pusher.velocityDirty = true;
+        pusher.knockedBack = true;
     }
 
     public static void playLaunchTrailEffects(ServerPlayerEntity target) {

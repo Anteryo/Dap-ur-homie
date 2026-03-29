@@ -193,8 +193,8 @@ public class DivineFlamCombo {
                     float yawP1 = (float) (Math.atan2(dz, dx) * 180 / Math.PI) - 90;
                     float yawP2 = yawP1 + 180; // Face opposite direction
 
-                    p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, yawP1, p1.getPitch());
-                    p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, yawP2, p2.getPitch());
+                    p1.teleport(p1.getEntityWorld(), targetP1.x, targetP1.y, targetP1.z, java.util.Set.of(), yawP1, p1.getPitch(), false);
+                    p2.teleport(p2.getEntityWorld(), targetP2.x, targetP2.y, targetP2.z, java.util.Set.of(), yawP2, p2.getPitch(), false);
                 }
             }
         }

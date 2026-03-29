@@ -28,7 +28,7 @@ public class HugClientHandler {
                 "key.coopmoves.hug",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_F,
-                "category.coopmoves"
+                KeyBinding.Category.MISC
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

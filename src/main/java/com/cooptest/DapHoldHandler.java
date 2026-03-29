@@ -120,12 +120,12 @@ public class DapHoldHandler {
         p1.setYaw(yawP1);
         p1.setBodyYaw(yawP1);
         p1.setHeadYaw(yawP1);
-        p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, yawP1, 0.0f);
+        p1.teleport(p1.getEntityWorld(), p1Pos.x, p1Pos.y, p1Pos.z, java.util.Set.of(), yawP1, 0.0f, false);
 
         p2.setYaw(yawP2);
         p2.setBodyYaw(yawP2);
         p2.setHeadYaw(yawP2);
-        p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, yawP2, 0.0f);
+        p2.teleport(p2.getEntityWorld(), p2Pos.x, p2Pos.y, p2Pos.z, java.util.Set.of(), yawP2, 0.0f, false);
     }
 
 
@@ -349,15 +349,15 @@ public class DapHoldHandler {
         Vec3d newHf  = hf.getEntityPos().add(dir.multiply(move));
         Vec3d newDap = dap.getEntityPos().add(dir.negate().multiply(move));
 
-        hf.teleport(hf.getEntityWorld(),   newHf.x,  newHf.y,  newHf.z,  hf.getYaw(),  hf.getPitch());
-        dap.teleport(dap.getEntityWorld(), newDap.x, newDap.y, newDap.z, dap.getYaw(), dap.getPitch());
+        hf.teleport(hf.getEntityWorld(), newHf.x, newHf.y, newHf.z, java.util.Set.of(), hf.getYaw(), hf.getPitch(), false);
+        dap.teleport(dap.getEntityWorld(), newDap.x, newDap.y, newDap.z, java.util.Set.of(), dap.getYaw(), dap.getPitch(), false);
     }
 
     private static void faceEachOther(ServerPlayerEntity a, ServerPlayerEntity b) {
         Vec3d diff = b.getEntityPos().subtract(a.getEntityPos());
         float yawA = (float)(Math.toDegrees(Math.atan2(diff.z, diff.x))) - 90f;
-        a.teleport(a.getEntityWorld(), a.getX(), a.getY(), a.getZ(), yawA,        a.getPitch());
-        b.teleport(b.getEntityWorld(), b.getX(), b.getY(), b.getZ(), yawA + 180f, b.getPitch());
+        a.teleport(a.getEntityWorld(), a.getX(), a.getY(), a.getZ(), java.util.Set.of(), yawA, a.getPitch(), false);
+        b.teleport(b.getEntityWorld(), b.getX(), b.getY(), b.getZ(), java.util.Set.of(), yawA + 180.0f, b.getPitch(), false);
     }
 
     private static void spawnHandStand(ServerPlayerEntity hf, ServerPlayerEntity dap) {

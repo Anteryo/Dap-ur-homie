@@ -100,8 +100,8 @@ public class DapSession {
         // Stop velocity completely
         playerA.setVelocity(Vec3d.ZERO);
         playerB.setVelocity(Vec3d.ZERO);
-        playerA.velocityDirty = true;
-        playerB.velocityDirty = true;
+        playerA.knockedBack = true;
+        playerB.knockedBack = true;
 
         playerA.fallDistance = 0;
         playerB.fallDistance = 0;
@@ -153,11 +153,9 @@ public class DapSession {
                 lerp(currentB.z, targetB.z, lerpSpeed)
         );
 
-        
-        playerA.teleport(playerA.getEntityWorld(), newPosA.x, newPosA.y, newPosA.z,
-                playerA.getYaw(), playerA.getPitch());
-        playerB.teleport(playerB.getEntityWorld(), newPosB.x, newPosB.y, newPosB.z,
-                playerB.getYaw(), playerB.getPitch());
+
+        playerA.teleport(playerA.getEntityWorld(), newPosA.x, newPosA.y, newPosA.z, java.util.Set.of(), playerA.getYaw(), playerA.getPitch(), false);
+        playerB.teleport(playerB.getEntityWorld(), newPosB.x, newPosB.y, newPosB.z, java.util.Set.of(), playerB.getYaw(), playerB.getPitch(), false);
     }
 
    
@@ -174,19 +172,19 @@ public class DapSession {
         playerA.setYaw(yawA);
         playerA.setBodyYaw(yawA);
         playerA.setHeadYaw(yawA);
-        playerA.prevYaw = yawA;  // Prevent interpolation
-        playerA.prevBodyYaw = yawA;  // Prevent body lag
-        playerA.prevHeadYaw = yawA;
+        playerA.lastYaw = yawA;  // Prevent interpolation
+        playerA.lastBodyYaw = yawA;  // Prevent body lag
+        playerA.lastHeadYaw = yawA;
 
         playerB.setYaw(yawB);
         playerB.setBodyYaw(yawB);
         playerB.setHeadYaw(yawB);
-        playerB.prevYaw = yawB;  // Prevent interpolation
-        playerB.prevBodyYaw = yawB;  // Prevent body lag
-        playerB.prevHeadYaw = yawB;
+        playerB.lastYaw = yawB;  // Prevent interpolation
+        playerB.lastBodyYaw = yawB;  // Prevent body lag
+        playerB.lastHeadYaw = yawB;
 
-        playerA.teleport(playerA.getEntityWorld(), posA.x, posA.y, posA.z, yawA, playerA.getPitch());
-        playerB.teleport(playerB.getEntityWorld(), posB.x, posB.y, posB.z, yawB, playerB.getPitch());
+        playerA.teleport(playerA.getEntityWorld(), posA.x, posA.y, posA.z, java.util.Set.of(), yawA, playerA.getPitch(), false);
+        playerB.teleport(playerB.getEntityWorld(), posB.x, posB.y, posB.z, java.util.Set.of(), yawB, playerB.getPitch(), false);
     }
 
     

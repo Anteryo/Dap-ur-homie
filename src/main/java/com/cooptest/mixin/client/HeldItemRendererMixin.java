@@ -5,7 +5,7 @@ import com.cooptest.GrabInputHandler;
 import com.cooptest.PoseNetworking;
 import com.cooptest.PoseState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Arm;
@@ -75,7 +75,7 @@ public class HeldItemRendererMixin {
     @Unique private static boolean wasHolding = false;
 
     @Inject(method = "renderArm", at = @At("HEAD"))
-    private void onRenderArm(MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+    private void onRenderArm(MatrixStack matrices, OrderedRenderCommandQueue renderCommandQueue,
                              int light, Arm arm, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;

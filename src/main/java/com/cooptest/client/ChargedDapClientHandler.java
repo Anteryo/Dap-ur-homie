@@ -101,9 +101,7 @@ public class ChargedDapClientHandler {
     }
 
     public static void register() {
-        chargedDapKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coopmoves.dap", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_G, "category.coopmoves"
-        ));
+                chargedDapKey = KeyBindingHelper.registerKeyBinding((KeyBinding)new KeyBinding("key.coopmoves.dap", InputUtil.Type.KEYSYM, 71, KeyBinding.Category.MISC));
 
         ClientPlayNetworking.registerGlobalReceiver(ChargedDapHandler.ChargeSyncPayload.ID,
                 (payload, context) -> {
@@ -238,13 +236,12 @@ public class ChargedDapClientHandler {
                 }
         );
 
-     
-        fireDapComboKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coopmoves.fire_dap_combo",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_J,
-                "category.coopmoves"
-        ));
+
+        fireDapComboKey = KeyBindingHelper.registerKeyBinding((KeyBinding)new KeyBinding("key.coopmoves.fire_dap_combo", InputUtil.Type.KEYSYM, 74, KeyBinding.Category.MISC));
+        ClientPlayNetworking.registerGlobalReceiver(ChargedDapHandler.FireDapWindowPayload.ID, (payload, context) -> context.client().execute(() -> {
+            fireDapComboWindowStart = System.currentTimeMillis();
+            inFireDapComboWindow = true;
+        }));
 
         ClientPlayNetworking.registerGlobalReceiver(ChargedDapHandler.FireDapWindowPayload.ID,
                 (payload, context) -> {
@@ -480,7 +477,7 @@ public class ChargedDapClientHandler {
             double velY = Math.random() * 0.2;
             double velZ = (Math.random() - 0.5) * 0.3;
 
-            client.world.addParticle(particle, x + offsetX, y + offsetY, z + offsetZ, velX, velY, velZ);
+            client.world.addParticleClient(particle, x + offsetX, y + offsetY, z + offsetZ, velX, velY, velZ);
         }
 
         if (perfect) {
@@ -488,7 +485,7 @@ public class ChargedDapClientHandler {
                 double angle = (i / 8.0) * Math.PI * 2;
                 double offsetX = Math.cos(angle) * 0.3;
                 double offsetZ = Math.sin(angle) * 0.3;
-                client.world.addParticle(net.minecraft.particle.ParticleTypes.ENCHANT,
+                client.world.addParticleClient(net.minecraft.particle.ParticleTypes.ENCHANT,
                         x + offsetX, y + 0.5, z + offsetZ, 0, 0.1, 0);
             }
         }
@@ -545,16 +542,13 @@ public class ChargedDapClientHandler {
                 context.fill(0, 0, screenWidth, screenHeight, (alpha << 24) | 0xFFFFFF);
             } else if (elapsed < IMPACT1_END) {
                 // Impact1
-                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-                context.drawTexture(IMPACT1_TEXTURE, 0, 0, screenWidth, screenHeight, 0, 0, 1920, 1080, 1920, 1080);
+                context.drawTexture(net.minecraft.client.gl.RenderPipelines.GUI_TEXTURED, IMPACT1_TEXTURE, 0, 0, 0.0f, 0.0f, screenWidth, screenHeight, 1920, 1080, 1920, 1080);
             } else if (elapsed < IMPACT2_END) {
                 // Impact2
-                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-                context.drawTexture(IMPACT2_TEXTURE, 0, 0, screenWidth, screenHeight, 0, 0, 1920, 1080, 1920, 1080);
+                context.drawTexture(net.minecraft.client.gl.RenderPipelines.GUI_TEXTURED, IMPACT2_TEXTURE, 0, 0, 0.0f, 0.0f, screenWidth, screenHeight, 1920, 1080, 1920, 1080);
             } else if (elapsed < IMPACT3_END) {
                 // Impact3
-                com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-                context.drawTexture(IMPACT3_TEXTURE, 0, 0, screenWidth, screenHeight, 0, 0, 1920, 1080, 1920, 1080);
+                context.drawTexture(net.minecraft.client.gl.RenderPipelines.GUI_TEXTURED, IMPACT3_TEXTURE, 0, 0, 0.0f, 0.0f, screenWidth, screenHeight, 1920, 1080, 1920, 1080);
             } else {
                 // Done - reset
                 perfectImpactActive = false;
@@ -601,8 +595,7 @@ public class ChargedDapClientHandler {
                 return;
             }
 
-            com.mojang.blaze3d.systems.RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            context.drawTexture(frameTexture, 0, 0, screenWidth, screenHeight, 0, 0, 1920, 1080, 1920, 1080);
+            context.drawTexture(net.minecraft.client.gl.RenderPipelines.GUI_TEXTURED, frameTexture, 0, 0, 0.0f, 0.0f, screenWidth, screenHeight, 1920, 1080, 1920, 1080);
         }
 
         // ===== COOLDOWN INDICATOR =====

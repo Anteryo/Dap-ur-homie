@@ -49,7 +49,7 @@ public class FireSlapHandler {
                 SLAP_VERTICAL,
                 direction.z * SLAP_KNOCKBACK
         );
-        target.velocityDirty = true;
+        target.knockedBack = true;
 
         target.setOnFireFor(2);
 

@@ -1,33 +1,9 @@
-DapHoldHandler.java
-DapSession.java
-DivineFlamCombo.java
-DivineFlamTestCommand.java
-FallDapHandler.java
-FireDapTestCommand.java
-GrabInputHandler.java
-GrabMechanic.java
-HeavenDapSoloCommand.java
-HighFiveHandler.java
-HighFiveHugHandler.java
-MahitoEffect.java
-MahitoItems.java
-MahitoTrollHandler.java
+nothing!
 
 ==== CLIENT ====
-ChargedDapClientHandler.java
-DivineFlamComboClient.java
-HeavenDapClientHandler.java
-HighFiveClientHandler.java
-HugClientHandler.java
-QTEClientHandler.java
-ThrowPowerHUD.java
-TrajectoryRenderer.java
+TrajectoryRenderer.java (commented out, fix later, pray it works)
 
 ==== MIXINS ====
-GrabbedPlayerControlMixin.java
-PlayerModelMixin.java
-
+nothing!
 ==== CLIENT MIXINS ====
-HeldItemRendererMixin.java
 MovementFreezeMixin.java
-PlayerEntityRendererMixin.java

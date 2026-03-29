@@ -468,7 +468,7 @@ public class HighFiveHandler {
                     if (currentPos.squaredDistanceTo(frozenPos) > 0.01) {
                         player.requestTeleport(frozenPos.x, frozenPos.y, frozenPos.z);
                         player.setVelocity(Vec3d.ZERO);
-                        player.velocityDirty = true;
+                        player.knockedBack = true;
                     }
                 }
             }
@@ -938,7 +938,7 @@ public class HighFiveHandler {
             }
 
             entity.addVelocity(dir.x * strength, strength * 0.6, dir.z * strength);
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
 
             world.spawnParticles(ParticleTypes.CRIT,
                     entity.getX(), entity.getY() + 1, entity.getZ(),
@@ -967,8 +967,8 @@ public class HighFiveHandler {
         p1.setVelocity(dir1.x * push, 0.05, dir1.z * push);
         p2.setVelocity(dir2.x * push, 0.05, dir2.z * push);
 
-        p1.velocityDirty = true;
-        p2.velocityDirty = true;
+        p1.knockedBack = true;
+        p2.knockedBack = true;
     }
 
     private static void createHighFiveExplosion(ServerWorld world, Vec3d pos, ServerPlayerEntity p1, ServerPlayerEntity p2) {
@@ -987,11 +987,11 @@ public class HighFiveHandler {
             double knockbackStrength = (1.0 - dist / radius) * 2.0;
             Vec3d knockDir = entity.getEntityPos().subtract(pos).normalize();
             entity.addVelocity(knockDir.x * knockbackStrength, knockbackStrength * 0.5, knockDir.z * knockbackStrength);
-            entity.velocityDirty = true;
+            entity.knockedBack = true;
 
             if (entity instanceof ServerPlayerEntity target) {
                 float damage = (float)((1.0 - dist / radius) * 8.0);
-                target.damage(world.getDamageSources().explosion(null, null), damage);
+                target.clientDamage(world.getDamageSources().explosion(null));
             }
         }
     }
@@ -1094,8 +1094,8 @@ public class HighFiveHandler {
 
         p1.setVelocity(Vec3d.ZERO);
         p2.setVelocity(Vec3d.ZERO);
-        p1.velocityDirty = true;
-        p2.velocityDirty = true;
+        p1.knockedBack = true;
+        p2.knockedBack = true;
 
         for (ServerPlayerEntity p : PlayerLookup.all(p1.getEntityWorld().getServer())) {
             ServerPlayNetworking.send(p, new FreezeStatePayload(id1, true));

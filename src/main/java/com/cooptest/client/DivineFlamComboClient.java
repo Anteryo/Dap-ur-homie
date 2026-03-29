@@ -19,7 +19,7 @@ public class DivineFlamComboClient {
                 "key.cooptest.divine_flame",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_J,
-                "category.cooptest"
+                KeyBinding.Category.MISC
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

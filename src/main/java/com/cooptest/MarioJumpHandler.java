@@ -179,7 +179,7 @@ public class MarioJumpHandler {
 
         Vec3d velocity = jumper.getVelocity();
         jumper.setVelocity(velocity.x, LAUNCH_VELOCITY, velocity.z);
-        jumper.velocityDirty = true;
+        jumper.knockedBack = true;
         PoseNetworking.broadcastAnimState(jumper, 30); // MARIO_JUMP
         PoseNetworking.broadcastAnimState(target, 31); // POP
 

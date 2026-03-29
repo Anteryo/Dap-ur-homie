@@ -1,0 +1,2 @@
+- mahito crashes game on kill, probably particle related, line 168 (issue source according to mc logs) commented out for now in MahitoTrollHandler.java
+- clicking a crafting table sends an invalid packet, based on logs this issue is from lines 23-25 in MahitoCraftingHandler.java

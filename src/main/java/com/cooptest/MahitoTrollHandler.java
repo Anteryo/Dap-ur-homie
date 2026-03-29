@@ -8,6 +8,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.particle.TintedParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -86,7 +87,7 @@ public class MahitoTrollHandler {
                 
                 if (data.trollStarted) {
                     victim.setVelocity(0, victim.getVelocity().y, 0);
-                    victim.velocityDirty = true;
+                    victim.knockedBack = true;
                 }
             }
         });
@@ -164,7 +165,7 @@ public class MahitoTrollHandler {
         world.spawnParticles(TintedParticleEffect.create(ParticleTypes.FLASH, 1f, 1f, 1f),
                 x, y, z, 3, 0, 0, 0, 0);
         world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, x, y + 2, z, 30, 0.4, 0.4, 0.4, 0.15);
-        world.spawnParticles(ParticleTypes.DRAGON_BREATH, x, y + 2, z, 20, 0.3, 0.3, 0.3, 0.1);
+// commenting ts out for now        world.spawnParticles((ParticleEffect)ParticleTypes.DRAGON_BREATH, x, y + 2, z, 20, 0.3, 0.3, 0.3, 0.1);
 
         // Explosion sounds
         world.playSound(null, x, y, z,
@@ -175,7 +176,7 @@ public class MahitoTrollHandler {
             SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.PLAYERS, 1.0f, 0.5f);
         
         // Kill with custom death message
-        victim.damage(world.getDamageSources().magic(), Float.MAX_VALUE);
+        victim.damage(world, world.getDamageSources().magic(), 9999.0F);
         
         // Announce
         for (ServerPlayerEntity player : world.getPlayers()) {

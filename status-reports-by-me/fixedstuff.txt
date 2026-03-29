@@ -32,6 +32,22 @@ CarryingSlowdown.java
 ChargedDapHandler.java
 ClientCrouchPoseHandler.java
 CoopMovesConfig.java
+MahitoEffect.java
+MahitoItems.java
+MahitoTrollHandler.java
+DapHoldHandler.java
+DapSession.java
+DivineFlamCombo.java
+DivineFlamTestCommand.java
+FallDapHandler.java
+FireDapTestCommand.java
+GrabInputHandler.java
+GrabMechanic.java
+HeavenDapSoloCommand.java
+HighFiveHandler.java
+HighFiveHugHandler.java
+
+FIXED EVERYTHING HERE FINALLYYYYYYYYYY
 
 ==== CLIENT ====
 FallDapClientHandler.java
@@ -47,12 +63,24 @@ MarioJumpClientHandler.java
 PushClientHandler.java
 HeavenWhiteOverlay.java
 ThrowAnimationTracker.java
+ChargedDapClientHandler.java
+DivineFlamComboClient.java
+HeavenDapClientHandler.java
+HighFiveClientHandler.java
+HugClientHandler.java
+QTEClientHandler.java
+ThrowPowerHUD.java
 
 ==== MIXINS ====
 CraftingResultSlotMixin.java
 CraftingScreenMixin.java
 ExampleMixin.java
 PlayerEntityPassengerOffsetMixin.java
+GrabbedPlayerControlMixin.java
+PlayerModelMixin.java
+
+everything here is done
 
 ==== CLIENT MIXINS ====
-nevermind
+PlayerEntityRendererMixin.java
+HeldItemRendererMixin.java

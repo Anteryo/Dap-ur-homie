@@ -4,8 +4,9 @@ import com.cooptest.GrabInputHandler;
 import com.cooptest.PoseNetworking;
 import com.cooptest.PoseState;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -25,7 +26,7 @@ public class TrajectoryRenderer {
     private static final float MAX_POWER_MULT = 3.5f;
 
     public static void register() {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(TrajectoryRenderer::render);
+        WorldRenderEvents.END_MAIN.register(TrajectoryRenderer::render);
     }
 
     private static void render(WorldRenderContext context) {
@@ -41,9 +42,11 @@ public class TrajectoryRenderer {
         float chargeProgress = GrabInputHandler.getThrowChargeProgress();
         if (chargeProgress <= 0) return;
 
+        // fix later and pray it works rn
+/*
         float power = MIN_POWER_MULT + (MAX_POWER_MULT - MIN_POWER_MULT) * chargeProgress;
 
-        Vec3d lookVec = client.player.getRotationVec(context.tickCounter().getTickDelta(true));
+        Vec3d lookVec = client.player.getRotationVec(context.tickCounter().getTickDelta());
         Vec3d startPos = client.player.getEyePos().add(0, 0.5, 0); // Above head
 
         Vec3d velocity = lookVec.multiply(power);
@@ -67,11 +70,11 @@ public class TrajectoryRenderer {
 
     private static void renderTrajectoryDots(WorldRenderContext context, Vec3d[] points, float charge) {
         MinecraftClient client = MinecraftClient.getInstance();
-        Camera camera = context.camera();
-        Vec3d camPos = camera.getEntityPos();
+        Camera camera = context.gameRenderer().getCamera();
+        Vec3d camPos = camera.getCameraPos();
 
         MatrixStack matrices = context.matrixStack();
-        matrices.push();
+        matrices.pushMatrix();
 
         matrices.translate(-camPos.x, -camPos.y, -camPos.z);
 
@@ -83,7 +86,7 @@ public class TrajectoryRenderer {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder buffer = tessellator.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
 
-        Matrix4f matrix = matrices.peek().getEntityPositionMatrix();
+        Matrix4f matrix = matrices.peek().getPositionMatrix();
 
         int r = (int)(charge * 255);
         int g = (int)((1 - charge) * 255);
@@ -121,6 +124,6 @@ public class TrajectoryRenderer {
         RenderSystem.enableCull();
         RenderSystem.disableBlend();
 
-        matrices.pop();
+        matrices.pop(); */
     }
 }

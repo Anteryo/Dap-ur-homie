@@ -38,12 +38,12 @@ public abstract class GrabbedPlayerControlMixin {
                 float holderPitch = holder.getPitch();
 
                 self.setYaw(holderYaw);
-                self.prevYaw = holderYaw;
+                self.lastYaw = holderYaw;
                 self.setBodyYaw(holderYaw);
 
                 self.setHeadYaw(holderYaw);
                 self.setPitch(holderPitch);
-                self.prevPitch = holderPitch;
+                self.lastPitch = holderPitch;
             }
         }
     }

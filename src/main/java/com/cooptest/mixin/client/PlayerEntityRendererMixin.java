@@ -2,9 +2,9 @@ package com.cooptest.mixin.client;
 
 import com.cooptest.PoseNetworking;
 import com.cooptest.PoseState;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
+import net.minecraft.client.render.entity.state.PlayerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,14 +28,17 @@ public class PlayerEntityRendererMixin {
     @Unique
     private static final HashMap<UUID, Float> lockedYaw = new HashMap<>();
 
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
-    private void rotateGrabbedPlayer(AbstractClientPlayerEntity player, float yaw, float tickDelta,
-                                     MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                                     int light, CallbackInfo ci) {
-        PoseState pose = PoseNetworking.poseStates.getOrDefault(player.getUuid(), PoseState.NONE);
+    @Inject(method = "setupTransforms(Lnet/minecraft/client/render/entity/state/PlayerEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;FF)V", at = @At("RETURN"))
+    private void rotateGrabbedPlayer(PlayerEntityRenderState state, MatrixStack matrices, float bodyYaw, float animationProgress, CallbackInfo ci) {
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.world == null) return;
+        Entity entity = client.world.getEntityById(state.id);
+        if (!(entity instanceof PlayerEntity)) return;
+        PlayerEntity player = (PlayerEntity) entity;
+        UUID uuid = player.getUuid();
+        PoseState pose = PoseNetworking.poseStates.getOrDefault(uuid, PoseState.NONE);
 
         if (pose == PoseState.GRABBED) {
-            matrices.push();
 
             float facingYaw;
 
@@ -60,7 +63,7 @@ public class PlayerEntityRendererMixin {
             // COMPLETELY OVERRIDE the render rotation
             // Ignore the passed 'yaw' parameter and use our locked yaw
             // This counter-rotates against what Minecraft wants to render
-            float counterRotation = -yaw + facingYaw;
+            float counterRotation = -bodyYaw + facingYaw;
 
             // Apply counter-rotation to lock player facing the correct direction
             matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(counterRotation));
@@ -74,17 +77,6 @@ public class PlayerEntityRendererMixin {
         } else {
             // Clean up stored yaw when no longer grabbed
             lockedYaw.remove(player.getUuid());
-            matrixPushed.put(player.getUuid(), false);
-        }
-    }
-
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("RETURN"))
-    private void restoreMatrix(AbstractClientPlayerEntity player, float yaw, float tickDelta,
-                               MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                               int light, CallbackInfo ci) {
-        Boolean pushed = matrixPushed.get(player.getUuid());
-        if (pushed != null && pushed) {
-            matrices.pop();
             matrixPushed.put(player.getUuid(), false);
         }
     }

@@ -14,9 +14,7 @@ public class HeavenDapClientHandler {
 
 
     public static void register() {
-        HudRenderCallback.EVENT.register((context, tickCounter) -> {
-            HeavenWhiteOverlay.render(context, tickCounter.getLastFrameDuration());
-        });
+        HudRenderCallback.EVENT.register((context, tickCounter) -> HeavenWhiteOverlay.render(context, tickCounter.getDynamicDeltaTicks()));
 
         net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(client -> {
             HeavenWhiteOverlay.tick();

@@ -16,7 +16,6 @@ public class MahitoEffect extends StatusEffect {
         return duration % 10 == 0;
     }
 
-    @Override
     public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
         return true;
     }

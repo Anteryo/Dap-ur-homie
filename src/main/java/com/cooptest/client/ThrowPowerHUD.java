@@ -55,7 +55,7 @@ public class ThrowPowerHUD {
         
         context.fill(barX - 2, barY - 2, barX + BAR_WIDTH + 2, barY + BAR_HEIGHT + 2, BG_COLOR);
         
-        context.drawBorder(barX - 2, barY - 2, BAR_WIDTH + 4, BAR_HEIGHT + 4, BORDER_COLOR);
+        context.drawStrokedRectangle(barX - 2, barY - 2, BAR_WIDTH + 4, BAR_HEIGHT + 4, BORDER_COLOR);
         
         int fillWidth = (int)(BAR_WIDTH * displayedCharge);
         

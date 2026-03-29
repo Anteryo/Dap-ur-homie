@@ -33,8 +33,7 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
-// Local
-    modImplementation files("libs/PlayerAnimationLibFabric-1.1.6+mc.1.21.11.jar")
+    modImplementation "com.zigythebird.playeranim:PlayerAnimationLibFabric:$pal_version"
 }
 processResources {
     inputs.property "version", project.version
