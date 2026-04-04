@@ -9,6 +9,7 @@
   "license": "MIT",
   "icon": "assets/testcoop/icon.png",
   "environment": "*",
+  "accessWidener": "testcoop.accesswidener",
   "entrypoints": {
     "main": [
       "com.cooptest.TestCoop"
@@ -21,8 +22,8 @@
     "testcoop.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.18.0",
-    "minecraft": "~1.21.1",
+    "fabricloader": ">=0.18.4",
+    "minecraft": "~1.21.11",
     "java": ">=21",
     "fabric-api": "*"
   }

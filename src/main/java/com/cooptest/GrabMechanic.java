@@ -96,8 +96,12 @@ public class GrabMechanic {
         if (heldPose != PoseState.GRAB_READY) return false; // and dis are connected (lil note for testing)
 
         System.out.println("[tryGrab] attempting startRiding...");
-        boolean success = held.startRiding(holder, true, true);
-        System.out.println("[tryGrab] startRiding result=" + success);
+        System.out.println("[tryGrab] holder type saveable=" + holder.getType().isSaveable());
+        System.out.println("[tryGrab] world isClient=" + holder.getEntityWorld().isClient());
+        held.stopRiding();
+        held.vehicle = holder;
+        holder.addPassenger(held);
+        boolean success = held.hasVehicle() && held.getVehicle() == holder;
         if (!success) return false;
 
         holding.put(holder.getUuid(), held.getUuid());
