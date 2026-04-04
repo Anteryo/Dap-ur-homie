@@ -12,16 +12,6 @@ public class GrabInteractionHandler {
             if (!(player instanceof ServerPlayerEntity clicker)) return ActionResult.PASS;
             if (!(entity instanceof ServerPlayerEntity target)) return ActionResult.PASS;
 
-            System.out.println("[GrabDebug] clicker=" + clicker.getName().getString()
-                    + " target=" + target.getName().getString());
-
-            PoseState clickerPose = PoseNetworking.poseStates.getOrDefault(clicker.getUuid(), PoseState.NONE);
-            PoseState targetPose = PoseNetworking.poseStates.getOrDefault(target.getUuid(), PoseState.NONE);
-
-            System.out.println("[GrabDebug] clickerPose=" + clickerPose + " targetPose=" + targetPose);
-            System.out.println("[GrabDebug] distance=" + clicker.distanceTo(target));
-            System.out.println("[GrabDebug] alreadyHolding=" + GrabMechanic.isHolding(clicker)
-                    + " alreadyHeld=" + (GrabMechanic.heldBy.containsKey(target.getUuid())));
 
             PoseState targetEntityPose = PoseNetworking.poseStates.getOrDefault(target.getUuid(), PoseState.NONE);
             if (targetEntityPose != PoseState.GRAB_READY) return ActionResult.PASS;

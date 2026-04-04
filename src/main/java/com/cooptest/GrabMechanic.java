@@ -77,15 +77,7 @@ public class GrabMechanic {
     private static final double AIR_CONTROL_STRENGTH = 0.025;
 
     public static boolean tryGrab(ServerPlayerEntity holder, ServerPlayerEntity held) {
-        System.out.println("[tryGrab] holder=" + holder.getName().getString() + " held=" + held.getName().getString());
-        System.out.println("[tryGrab] holderUuid=" + holder.getUuid() + " heldUuid=" + held.getUuid());
-        System.out.println("[tryGrab] holder==held: " + (holder == held));
-        System.out.println("[tryGrab] distance=" + holder.distanceTo(held));
-        System.out.println("[tryGrab] alreadyHolding=" + holding.containsKey(holder.getUuid()));
-        System.out.println("[tryGrab] alreadyHeld=" + heldBy.containsKey(held.getUuid()));
-        System.out.println("[tryGrab] pushImmune=" + PushInteractionHandler.hasPushImmunity(held.getUuid()));
-        PoseState heldPose = PoseNetworking.poseStates.getOrDefault(held.getUuid(), PoseState.NONE); // dis
-        System.out.println("[tryGrab] heldPose=" + heldPose);
+        PoseState heldPose = PoseNetworking.poseStates.getOrDefault(held.getUuid(), PoseState.NONE);
         if (holder == held) return false;
         if (holder.distanceTo(held) > 3.0f) return false;
         if (holding.containsKey(holder.getUuid())) return false;
@@ -93,14 +85,11 @@ public class GrabMechanic {
 
         if (PushInteractionHandler.hasPushImmunity(held.getUuid())) return false;
 
-        if (heldPose != PoseState.GRAB_READY) return false; // and dis are connected (lil note for testing)
+        if (heldPose != PoseState.GRAB_READY) return false;
 
-        System.out.println("[tryGrab] attempting startRiding...");
-        System.out.println("[tryGrab] holder type saveable=" + holder.getType().isSaveable());
-        System.out.println("[tryGrab] world isClient=" + holder.getEntityWorld().isClient());
         held.stopRiding();
         held.vehicle = holder;
-        holder.addPassenger(held);
+        holder.addPassenger(held); // ignore the error we have an accesswidener
         boolean success = held.hasVehicle() && held.getVehicle() == holder;
         if (!success) return false;
 

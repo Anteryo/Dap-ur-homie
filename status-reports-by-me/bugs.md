@@ -1,2 +1,0 @@
-- throw and shield mechanics are broken (should be on GrapInputHandler.java or smth similar.)
-  - yes boss im working on it i swea- ḩ̷̧̢̰̙̞̝̟͑̾̿̀̓́͑̊̚ḙ̸̈́̀̿̐͝ḽ̴̡̧̰̜̽̓͋̅̋̉p̶̗̈̾̍͘͠m̴̭͍̬̥̤̭͖͗̓͜ȅ̵̘̥͖́͌̂̍͋̀̊

@@ -1,0 +1,18 @@
+{
+  "key.category.testcoop.coopmoves": "Dap Ur HOMIES",
+  "key.coopmoves.grab": "Tut / Yakala",
+  "key.coopmoves.throw": "YEET (Basılı Tut)",
+  "key.coopmoves.shield": "İnsan Kalkanı Açma/Kapama",
+  "key.coopmoves.dap": "Dap (Basılı Tut)",
+  "key.coopmoves.highfive": "Beşlik Çak",
+  "key.coopmoves.push": "İt",
+  "key.coopmoves.fire_dap_combo": "Ateş Kombinasyonu",
+  "key.coopmoves.hug": "Sarıl",
+
+  "effect.testcoop.mahito": "Mahito'nun Laneti",
+  "item.testcoop.mahito_potion": "Mahito İksiri",
+  "item.minecraft.potion.effect.mahito_stuff": "Mahito İksiri",
+  "item.minecraft.splash_potion.effect.mahito_stuff": "Atılabilir Mahito İksiri",
+  "item.minecraft.lingering_potion.effect.mahito_stuff": "Kalıcı Mahito İksiri",
+  "item.minecraft.tipped_arrow.effect.mahito_stuff": "Mahito'nun Laneti'nin Oku"
+}
