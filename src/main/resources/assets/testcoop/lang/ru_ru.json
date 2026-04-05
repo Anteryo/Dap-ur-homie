@@ -1,0 +1,18 @@
+{
+  "key.category.testcoop.coopmoves": "Dap Ur HOMIES",
+  "key.coopmoves.grab": "Поднять / Поймать",
+  "key.coopmoves.throw": "YEET (Зажатие)",
+  "key.coopmoves.shield": "Живой щит (Перекл.)",
+  "key.coopmoves.dap": "Dap (Зажатие)",
+  "key.coopmoves.highfive": "Дать пять",
+  "key.coopmoves.push": "Толкнуть",
+  "key.coopmoves.fire_dap_combo": "Огненное комбо",
+  "key.coopmoves.hug": "Обнять",
+
+  "effect.testcoop.mahito": "Проклятие Махито",
+  "item.testcoop.mahito_potion": "Зелье проклятия Махито",
+  "item.minecraft.potion.effect.mahito_stuff": "Зелье проклятия Махито",
+  "item.minecraft.splash_potion.effect.mahito_stuff": "Взрывное зелье проклятия Махито",
+  "item.minecraft.lingering_potion.effect.mahito_stuff": "Оседающее зелье проклятия Махито",
+  "item.minecraft.tipped_arrow.effect.mahito_stuff": "Стрела с проклятием Махито"
+}

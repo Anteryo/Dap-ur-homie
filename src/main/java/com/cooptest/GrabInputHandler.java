@@ -36,15 +36,15 @@ public class GrabInputHandler {
 
     public static void register() {
         grabKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coopmoves.grab", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, KeyBinding.Category.MISC
+                "key.coopmoves.grab", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, ModKeyCategories.COOPMOVES
         ));
 
         throwKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coopmoves.throw", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_T, KeyBinding.Category.MISC
+                "key.coopmoves.throw", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_T, ModKeyCategories.COOPMOVES
         ));
 
         shieldKey = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.coopmoves.shield", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyBinding.Category.MISC
+                "key.coopmoves.shield", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, ModKeyCategories.COOPMOVES
         ));
 
         // Register shield mode receiver for client-side sync

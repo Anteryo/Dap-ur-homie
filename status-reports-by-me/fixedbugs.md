@@ -1,1 +1,5 @@
-yeah, no thanks.
+- mahito crashes game on kill, particle related, line 168 (issue source according to mc logs) commented out for now in MahitoTrollHandler.java
+- clicking a crafting table sends an invalid packet, based on logs this issue is from lines 23-25 in MahitoCraftingHandler.java
+- summoning a mannequin crashes game almost instantly because somewhere the mod treats the mannequin as a player, issue originates from mixin/client/PlayerEntityRendererMixin.java and mixin/PlayerModelMixin.java
+- mahito items arent translated correctly
+- throw and shield mechanics are broken (should be on GrapInputHandler.java or smth similar.) so turns out i needed an entire accesswidener and a whole ass mixin for this, and a buncha extra debug stuff that i should remove

@@ -1,6 +1,7 @@
 package com.cooptest.client;
 
 import com.cooptest.ChargedDapHandler;
+import com.cooptest.ModKeyCategories;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -101,7 +102,7 @@ public class ChargedDapClientHandler {
     }
 
     public static void register() {
-                chargedDapKey = KeyBindingHelper.registerKeyBinding((KeyBinding)new KeyBinding("key.coopmoves.dap", InputUtil.Type.KEYSYM, 71, KeyBinding.Category.MISC));
+                chargedDapKey = KeyBindingHelper.registerKeyBinding((KeyBinding)new KeyBinding("key.coopmoves.dap", InputUtil.Type.KEYSYM, 71, ModKeyCategories.COOPMOVES));
 
         ClientPlayNetworking.registerGlobalReceiver(ChargedDapHandler.ChargeSyncPayload.ID,
                 (payload, context) -> {
@@ -237,7 +238,7 @@ public class ChargedDapClientHandler {
         );
 
 
-        fireDapComboKey = KeyBindingHelper.registerKeyBinding((KeyBinding)new KeyBinding("key.coopmoves.fire_dap_combo", InputUtil.Type.KEYSYM, 74, KeyBinding.Category.MISC));
+        fireDapComboKey = KeyBindingHelper.registerKeyBinding((KeyBinding)new KeyBinding("key.coopmoves.fire_dap_combo", InputUtil.Type.KEYSYM, 74, ModKeyCategories.COOPMOVES));
         ClientPlayNetworking.registerGlobalReceiver(ChargedDapHandler.FireDapWindowPayload.ID, (payload, context) -> context.client().execute(() -> {
             fireDapComboWindowStart = System.currentTimeMillis();
             inFireDapComboWindow = true;

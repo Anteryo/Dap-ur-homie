@@ -21,6 +21,10 @@ repositories {
     }
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/testcoop.accesswidener")
+}
+
 fabricApi {
     configureDataGeneration {
         client = true

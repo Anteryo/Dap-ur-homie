@@ -1,6 +1,7 @@
 package com.cooptest.client;
 
 import com.cooptest.HighFiveHugHandler;
+import com.cooptest.ModKeyCategories;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -28,7 +29,7 @@ public class HugClientHandler {
                 "key.coopmoves.hug",
                 InputUtil.Type.KEYSYM,
                 GLFW.GLFW_KEY_F,
-                KeyBinding.Category.MISC
+                ModKeyCategories.COOPMOVES
         ));
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {

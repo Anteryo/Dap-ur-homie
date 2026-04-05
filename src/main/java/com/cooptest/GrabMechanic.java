@@ -77,6 +77,7 @@ public class GrabMechanic {
     private static final double AIR_CONTROL_STRENGTH = 0.025;
 
     public static boolean tryGrab(ServerPlayerEntity holder, ServerPlayerEntity held) {
+        PoseState heldPose = PoseNetworking.poseStates.getOrDefault(held.getUuid(), PoseState.NONE);
         if (holder == held) return false;
         if (holder.distanceTo(held) > 3.0f) return false;
         if (holding.containsKey(holder.getUuid())) return false;
@@ -84,10 +85,12 @@ public class GrabMechanic {
 
         if (PushInteractionHandler.hasPushImmunity(held.getUuid())) return false;
 
-        PoseState holderPose = PoseNetworking.poseStates.getOrDefault(holder.getUuid(), PoseState.NONE);
-        if (holderPose != PoseState.GRAB_READY) return false;
+        if (heldPose != PoseState.GRAB_READY) return false;
 
-        boolean success = held.startRiding(holder);
+        held.stopRiding();
+        held.vehicle = holder;
+        holder.addPassenger(held); // ignore the error we have an accesswidener
+        boolean success = held.hasVehicle() && held.getVehicle() == holder;
         if (!success) return false;
 
         holding.put(holder.getUuid(), held.getUuid());
@@ -276,8 +279,7 @@ public class GrabMechanic {
             }
 
             long timeSinceThrow = System.currentTimeMillis() - data.throwTimeMs;
-            if (!data.elytraBoostUsed && timeSinceThrow < 2000) {
-                if (elytraBoostRequests.remove(playerId) != null) {
+            if (!data.elytraBoostUsed && timeSinceThrow < 2000) {{
                     if (!data.elytraBoostUsed && timeSinceThrow < 2000L && elytraBoostRequests.remove(playerId) != null && player.getEquippedStack(EquipmentSlot.CHEST).getItem() .equals(net.minecraft.item.Items.ELYTRA.getDefaultStack().getItem())) {
                         Vec3d look = player.getRotationVec(1.0f);
                         double boostStrength = 1.5; // Similar to small rocket
@@ -288,8 +290,7 @@ public class GrabMechanic {
                         ));
                         player.knockedBack = true;
 
-                        player.startGliding(); /* i'm not sure but i THINK fallflying is gliding now?
-                        idk, the official maven repo is acting like it is, ill check it out - update, it is. */
+                        player.startGliding();
                         player.getEntityWorld().playSound(null, player.getX(), player.getY(), player.getZ(),
                                 SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.PLAYERS, 1.0f, 1.2f);
                         player.getEntityWorld().spawnParticles(ParticleTypes.FIREWORK,

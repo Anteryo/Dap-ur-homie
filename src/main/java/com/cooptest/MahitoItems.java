@@ -11,6 +11,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 
@@ -21,7 +22,7 @@ public class MahitoItems {
     public static void register() {
         // Register the potion type - 60 seconds duration
         Potion mahitoPotion = new Potion(
-                "", new StatusEffectInstance(ModEffects.MAHITO, 1200, 0) // 60 seconds
+                "mahito_stuff", new StatusEffectInstance(ModEffects.MAHITO, 1200, 0) // 60 seconds
         );
 
         MAHITO_POTION = Registry.<Potion, Potion>registerReference(
@@ -46,6 +47,7 @@ public class MahitoItems {
         ItemStack stack = new ItemStack(Items.POTION);
         stack.set(DataComponentTypes.POTION_CONTENTS,
                 new PotionContentsComponent(MAHITO_POTION));
+        stack.set(DataComponentTypes.ITEM_NAME, Text.translatable("item.testcoop.mahito_potion"));
         return stack;
     }
 }

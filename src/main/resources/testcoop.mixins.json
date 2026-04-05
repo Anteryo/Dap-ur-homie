@@ -8,7 +8,8 @@
     "ExampleMixin",
     "GrabbedPlayerControlMixin",
     "PlayerEntityPassengerOffsetMixin",
-    "PlayerModelMixin"
+    "PlayerModelMixin",
+    "PlayerRidingMixin"
   ],
   "client": [
     "client.HeldItemRendererMixin",
