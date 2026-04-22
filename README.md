@@ -1,6 +1,6 @@
 # Dap ur HOMIES
 Cooperative Multiplayer Moves for Minecraft
-This is a Fabric mod for Minecraft 1.21.1 (and 1.21.11 soon, hopefully) that adds cooperative player-to-player interaction mechanics. Dap your friends, high-five, hug, grab & throw, and pull off combo chains with perfectly timed QTEs.
+This is a Fabric mod for Minecraft 1.21.1 and 1.21.11 that adds cooperative player-to-player interaction mechanics. Dap your friends, high-five, hug, grab & throw, and pull off combo chains with perfectly timed QTEs.
 
 ## Star History
 
