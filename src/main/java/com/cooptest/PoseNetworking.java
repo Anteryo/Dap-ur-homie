@@ -232,7 +232,7 @@ public class PoseNetworking {
                             String animName = (animState == 10) ? "DAP_HIT" : "PERFECT_DAP_HIT";
                             String playerName = targetPlayer.getName().getString();
 
-                            if (isLocalPlayer) {
+/*                            if (isLocalPlayer) {
                                 localPlayer.sendMessage(
                                         net.minecraft.text.Text.literal("§c[DEBUG] Anim " + animName + " for ME (this should only show if I did the dap!)"),
                                         false
@@ -241,14 +241,14 @@ public class PoseNetworking {
                                 localPlayer.sendMessage(
                                         net.minecraft.text.Text.literal("§e[DEBUG] Anim " + animName + " for " + playerName + " (not me)"),
                                         false
-                                );
+                                ); */
                             }
                         }
 
                         // Apply the animation to THIS SPECIFIC PLAYER ONLY
                         com.cooptest.client.CoopAnimationHandler.setAnimStateFromNetwork(targetPlayer, animState);
                     }
-                }
+//                }
             });
         });
     }
