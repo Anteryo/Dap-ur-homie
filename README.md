@@ -4,11 +4,11 @@ This is a Fabric mod for Minecraft 1.21.1 (and 1.21.11 soon, hopefully) that add
 
 ## Star History
 
-<a href="https://www.star-history.com/?repos=itsfirecat%2FDap-ur-homie&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=itsfirecat%2FDap-ur-homie%2CAnteryo%2FDap-ur-homie&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=itsfirecat/Dap-ur-homie&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=itsfirecat/Dap-ur-homie&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=itsfirecat/Dap-ur-homie&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=itsfirecat/Dap-ur-homie%2CAnteryo/Dap-ur-homie&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=itsfirecat/Dap-ur-homie%2CAnteryo/Dap-ur-homie&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=itsfirecat/Dap-ur-homie%2CAnteryo/Dap-ur-homie&type=date&legend=top-left" />
  </picture>
 </a>
 
