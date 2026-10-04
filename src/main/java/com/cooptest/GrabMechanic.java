@@ -88,8 +88,12 @@ public class GrabMechanic {
         PoseState holderPose = PoseNetworking.poseStates.getOrDefault(holder.getUuid(), PoseState.NONE);
         if (holderPose != PoseState.GRAB_READY) return false;
 
-        boolean success = held.startRiding(holder);
-        if (!success) return false;
+        System.out.println("[tryGrab] holder type saveable=" + holder.getType().isSaveable());
+        System.out.println("[tryGrab] world isClient=" + holder.getEntityWorld().isClient());
+        held.stopRiding();
+        held.vehicle = holder;
+        holder.addPassenger(held);
+        boolean success = held.hasVehicle() && held.getVehicle() == holder;
 
         holding.put(holder.getUuid(), held.getUuid());
         heldBy.put(held.getUuid(), holder.getUuid());

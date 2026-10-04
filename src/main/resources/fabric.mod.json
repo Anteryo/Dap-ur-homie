@@ -27,5 +27,16 @@
     "java": ">=21",
     "fabric-api": "*",
     "player_animation_library": ">=1.1.6"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/sCZuJwRD5s",
+        "modmenu.kofi": "https://ko-fi.com/anteryo",
+        "modmenu.modrinth": "https://modrinth.com/mod/dap-ur-homies",
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/dap-ur-homies",
+        "modmenu.youtube": "https://youtube.com/@anteryo"
+      }
+    }
   }
 }
